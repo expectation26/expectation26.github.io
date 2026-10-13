@@ -3,338 +3,401 @@
 <html lang="zh-CN">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <meta name="theme-color" content="#101014">
-  <meta name="description" content="个人作品集与科研经历">
-  <title>个人作品集 | Portfolio</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#0b0d14">
+  <meta name="description" content="Yuki 的个人作品集，记录科研项目、材料探索与成长经历。">
+  <title>Yuki — Personal Portfolio</title>
   <style>
     :root {
-      --bg: #101014;
-      --panel: #19191f;
-      --text: #f4f2f8;
-      --muted: #aaa7b6;
-      --purple: #b49aff;
-      --green: #c7ff70;
+      --bg: #0b0d14;
+      --panel: #131722;
+      --panel2: #191d2b;
+      --white: #f6f7fb;
+      --muted: #a1a8bb;
+      --blue: #7aa7ff;
+      --purple: #c1a5ff;
       --line: rgba(255,255,255,.12);
+      --max: 1120px;
     }
 
     * { box-sizing: border-box; }
-
-    html { scroll-behavior: smooth; }
+    html { scroll-behavior: smooth; scroll-padding-top: 90px; }
 
     body {
       margin: 0;
+      color: var(--white);
       background:
-        radial-gradient(ellipse at 85% 5%, rgba(133,91,255,.16), transparent 35%),
+        radial-gradient(ellipse at 75% 0%, rgba(87,111,255,.13), transparent 32%),
         var(--bg);
-      color: var(--text);
-      font-family: Inter, "PingFang SC", "Microsoft YaHei", sans-serif;
+      font-family: Inter, -apple-system, BlinkMacSystemFont,
+        "Segoe UI", "PingFang SC", "Microsoft YaHei", sans-serif;
       line-height: 1.7;
     }
 
     a { color: inherit; text-decoration: none; }
+    button, a { -webkit-tap-highlight-color: transparent; }
 
     .wrap {
-      width: min(1100px, calc(100% - 40px));
-      margin: auto;
+      width: min(var(--max), calc(100% - 48px));
+      margin-inline: auto;
     }
 
-    nav {
+    .nav {
       display: flex;
-      align-items: center;
       justify-content: space-between;
-      padding: 25px 0;
+      align-items: center;
+      padding: 23px 0;
       border-bottom: 1px solid var(--line);
     }
 
-    .logo {
+    .brand {
       font-size: 17px;
       font-weight: 800;
-      letter-spacing: 1px;
+      letter-spacing: 1.8px;
     }
 
-    .logo span { color: var(--green); }
+    .brand span { color: var(--blue); }
 
-    .nav-links {
+    .links {
       display: flex;
-      gap: 26px;
+      align-items: center;
+      gap: 27px;
       color: var(--muted);
       font-size: 13px;
     }
 
-    .nav-links a:hover { color: var(--green); }
+    .links a { transition: color .2s; }
+    .links a:hover { color: var(--white); }
 
     .hero {
-      min-height: 540px;
+      min-height: 650px;
       display: grid;
-      grid-template-columns: 1.4fr .6fr;
+      grid-template-columns: 1.15fr .85fr;
+      gap: 38px;
       align-items: center;
-      gap: 36px;
-      padding: 80px 0;
+      padding: 72px 0 90px;
     }
 
-    .eyebrow {
-      color: var(--green);
+    .kicker {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      color: var(--blue);
       text-transform: uppercase;
-      letter-spacing: 3px;
-      font-size: 12px;
+      letter-spacing: 2.8px;
+      font-size: 11px;
       font-weight: 700;
     }
 
-    h1 {
-      font-size: clamp(44px, 7vw, 82px);
-      line-height: 1.1;
-      letter-spacing: -3px;
-      margin: 22px 0;
+    .kicker::before {
+      content: "";
+      width: 24px;
+      height: 1px;
+      background: currentColor;
     }
 
-    h1 .accent {
-      color: var(--purple);
-      display: block;
+    h1 {
+      margin: 26px 0 24px;
+      font-size: clamp(54px, 8vw, 100px);
+      line-height: .99;
+      letter-spacing: -.065em;
+      font-weight: 750;
+    }
+
+    h1 .line { display: block; }
+    h1 .gradient {
+      color: transparent;
+      background: linear-gradient(100deg, #8bb8ff, #c7a8ff 75%);
+      -webkit-background-clip: text;
+      background-clip: text;
     }
 
     .intro {
-      max-width: 550px;
+      max-width: 490px;
       color: var(--muted);
-      font-size: 16px;
+      font-size: 15px;
+      line-height: 1.95;
     }
 
     .actions {
       display: flex;
       flex-wrap: wrap;
       gap: 12px;
-      margin-top: 30px;
+      margin-top: 29px;
     }
 
     .btn {
-      display: inline-block;
-      border: 1px solid var(--line);
+      display: inline-flex;
+      justify-content: center;
+      align-items: center;
+      gap: 10px;
       padding: 11px 18px;
-      border-radius: 30px;
+      border: 1px solid var(--line);
+      border-radius: 100px;
       font-size: 13px;
-      transition: .2s ease;
+      transition: transform .2s, background .2s, border-color .2s;
     }
 
+    .btn:hover { transform: translateY(-3px); border-color: #8497cb; }
+
     .btn.primary {
-      color: #141414;
-      background: var(--green);
-      border-color: var(--green);
+      background: var(--white);
+      color: #0b0d14;
+      border-color: var(--white);
       font-weight: 700;
     }
 
-    .btn:hover { transform: translateY(-3px); }
-
-    .visual {
-      min-height: 300px;
-      border: 1px solid var(--line);
-      border-radius: 48% 48% 22px 22px;
-      background: linear-gradient(145deg, #292039, #17171d 65%);
+    .art {
+      min-height: 420px;
+      position: relative;
       display: grid;
       place-items: center;
-      position: relative;
       overflow: hidden;
+      isolation: isolate;
+      border: 1px solid rgba(255,255,255,.13);
+      border-radius: 48% 48% 24px 24px;
+      background:
+        radial-gradient(ellipse at 50% 45%, rgba(116,119,255,.20), transparent 58%),
+        linear-gradient(150deg, #171b2b, #10121c);
     }
 
-    .orb {
-      width: 175px;
-      height: 175px;
-      border-radius: 50%;
-      background: linear-gradient(135deg, var(--purple), #7653d8 55%, var(--green));
-      box-shadow: 0 0 90px rgba(180,154,255,.3);
-      animation: float 5s ease-in-out infinite;
-    }
-
-    .orb::after {
+    .art::before {
       content: "";
-      display: block;
-      width: 75px;
-      height: 75px;
+      position: absolute;
+      width: 78%;
+      aspect-ratio: 1;
       border-radius: 50%;
-      background: #17171d;
-      transform: translate(75px, 24px);
+      background: linear-gradient(135deg, #75a8ff 4%, #a9a3ff 48%, #d3bcff 75%, #455de0);
+      filter: blur(1px);
+      opacity: .92;
+      transform: rotate(-24deg);
+      animation: float 8s ease-in-out infinite;
+      z-index: -1;
     }
 
-    .visual-label {
+    .art::after {
+      content: "";
       position: absolute;
+      width: 42%;
+      aspect-ratio: 1;
+      border-radius: 50%;
+      background: #171a27;
+      border: 1px solid rgba(255,255,255,.2);
+      box-shadow: 0 0 70px rgba(131,146,255,.25);
+      transform: translate(40%, -5%);
+    }
+
+    .orbit {
+      position: absolute;
+      width: 87%;
+      aspect-ratio: 1;
+      border: 1px solid rgba(220,226,255,.28);
+      border-radius: 50%;
+      transform: rotate(-25deg) scaleY(.65);
+    }
+
+    .art-label {
+      position: absolute;
+      left: 23px;
+      right: 23px;
       bottom: 22px;
-      left: 24px;
-      color: var(--muted);
-      font-size: 11px;
-      letter-spacing: 2px;
+      display: flex;
+      justify-content: space-between;
+      color: #c5c9dc;
+      font-size: 10px;
+      letter-spacing: 1.6px;
     }
 
     @keyframes float {
-      0%, 100% { transform: translateY(0) rotate(-8deg); }
-      50% { transform: translateY(-13px) rotate(8deg); }
+      0%, 100% { transform: translateY(0) rotate(-24deg) scale(1); }
+      50% { transform: translateY(-12px) rotate(-12deg) scale(1.03); }
     }
 
-    section { padding: 55px 0; }
+    section { padding: 48px 0; }
 
-    .section-top {
+    .section-head {
       display: flex;
-      align-items: end;
       justify-content: space-between;
+      align-items: end;
       gap: 20px;
-      margin-bottom: 26px;
+      margin-bottom: 27px;
     }
 
-    .section-top h2 {
-      font-size: clamp(28px, 4vw, 40px);
-      margin: 6px 0 0;
-      letter-spacing: -1px;
+    .section-index {
+      color: var(--blue);
+      font-size: 11px;
+      text-transform: uppercase;
+      letter-spacing: 2.5px;
     }
 
-    .section-top p {
+    h2 {
+      margin: 8px 0 0;
+      font-size: clamp(30px, 4vw, 46px);
+      letter-spacing: -.045em;
+      line-height: 1.2;
+    }
+
+    .section-note {
       color: var(--muted);
-      font-size: 13px;
+      font-size: 12px;
       margin: 0;
     }
 
-    .about {
+    .about-grid, .project-grid {
       display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 18px;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 16px;
     }
 
-    .panel {
-      background: var(--panel);
+    .card {
+      padding: 27px;
       border: 1px solid var(--line);
-      border-radius: 18px;
-      padding: 26px;
+      border-radius: 17px;
+      background: linear-gradient(145deg, rgba(27,32,47,.92), rgba(16,18,28,.92));
     }
 
-    .panel h3 { margin-top: 0; }
+    .card h3 {
+      font-size: 20px;
+      margin: 0 0 10px;
+      letter-spacing: -.4px;
+    }
 
-    .panel p, .project p {
+    .card p {
       color: var(--muted);
-      font-size: 14px;
+      font-size: 13px;
+      margin: 0;
+      line-height: 1.9;
     }
 
-    .tags {
+    .chips {
       display: flex;
       flex-wrap: wrap;
       gap: 8px;
       margin-top: 20px;
     }
 
-    .tag {
-      border: 1px solid var(--line);
-      border-radius: 30px;
-      padding: 5px 10px;
-      font-size: 11px;
-      color: #ded7ff;
-    }
-
-    .projects {
-      display: grid;
-      grid-template-columns: repeat(2, minmax(0, 1fr));
-      gap: 16px;
+    .chip {
+      color: #d2d8f2;
+      border: 1px solid rgba(175,188,255,.18);
+      background: rgba(120,144,255,.06);
+      border-radius: 100px;
+      padding: 4px 10px;
+      font-size: 10px;
     }
 
     .project {
-      min-height: 240px;
-      background: linear-gradient(145deg, #202027, #17171c);
-      border: 1px solid var(--line);
-      border-radius: 18px;
-      padding: 25px;
+      position: relative;
+      min-height: 255px;
+      overflow: hidden;
       transition: transform .25s, border-color .25s;
     }
 
     .project:hover {
       transform: translateY(-5px);
-      border-color: rgba(180,154,255,.6);
+      border-color: rgba(153,170,255,.55);
     }
 
-    .project-num {
-      color: var(--green);
-      font-size: 12px;
+    .project::after {
+      content: "";
+      position: absolute;
+      width: 135px;
+      height: 135px;
+      right: -60px;
+      top: -65px;
+      border-radius: 50%;
+      background: radial-gradient(circle, rgba(127,153,255,.20), transparent 70%);
+      pointer-events: none;
+    }
+
+    .project-no {
+      color: var(--blue);
+      font-size: 11px;
       letter-spacing: 2px;
     }
 
-    .project h3 {
-      font-size: 21px;
-      margin: 20px 0 8px;
-    }
-
-    .project .tags { margin-top: 18px; }
+    .project h3 { margin-top: 22px; }
 
     .timeline {
-      border-left: 1px solid var(--line);
-      margin-left: 8px;
-      padding-left: 25px;
+      border-left: 1px solid rgba(170,183,255,.3);
+      margin-left: 7px;
+      padding-left: 26px;
     }
 
     .timeline-item {
       position: relative;
-      padding-bottom: 26px;
+      padding: 0 0 29px;
     }
+
+    .timeline-item:last-child { padding-bottom: 0; }
 
     .timeline-item::before {
       content: "";
       position: absolute;
-      left: -31px;
-      top: 10px;
-      width: 11px;
-      height: 11px;
-      background: var(--purple);
+      width: 9px;
+      height: 9px;
       border-radius: 50%;
-      box-shadow: 0 0 15px rgba(180,154,255,.4);
+      left: -31px;
+      top: 9px;
+      background: var(--purple);
+      box-shadow: 0 0 15px rgba(193,165,255,.5);
     }
 
-    .timeline-item h3 { margin: 0 0 5px; }
-    .timeline-item p { margin: 0; color: var(--muted); font-size: 14px; }
+    .timeline-item h3 { margin: 0 0 5px; font-size: 16px; }
+    .timeline-item p { margin: 0; color: var(--muted); font-size: 13px; }
 
     .contact {
-      background: linear-gradient(120deg, #29203b, #191920);
+      position: relative;
+      overflow: hidden;
+      margin: 40px 0 70px;
+      padding: clamp(27px, 6vw, 58px);
       border: 1px solid var(--line);
-      border-radius: 22px;
-      padding: clamp(25px, 6vw, 55px);
-      margin: 35px 0 65px;
+      border-radius: 23px;
+      background:
+        radial-gradient(ellipse at 100% 0%, rgba(125,127,255,.20), transparent 45%),
+        linear-gradient(125deg, #171c2b, #11131d);
     }
 
-    .contact h2 {
-      font-size: clamp(30px, 5vw, 48px);
-      margin: 10px 0;
-    }
-
-    .contact p { color: var(--muted); }
+    .contact h2 { max-width: 600px; font-size: clamp(34px, 5.5vw, 58px); }
+    .contact p { color: var(--muted); font-size: 14px; }
+    .contact .actions { margin-top: 24px; }
 
     footer {
-      border-top: 1px solid var(--line);
-      padding: 22px 0 35px;
       display: flex;
       justify-content: space-between;
       gap: 15px;
+      padding: 23px 0 34px;
+      border-top: 1px solid var(--line);
       color: var(--muted);
-      font-size: 12px;
+      font-size: 11px;
     }
 
-    @media (max-width: 700px) {
-      .wrap { width: min(100% - 30px, 550px); }
+    footer a:hover { color: var(--white); }
 
-      nav { padding: 18px 0; }
-      .nav-links { gap: 13px; font-size: 12px; }
-
+    @media (max-width: 720px) {
+      .wrap { width: calc(100% - 32px); }
+      .nav { padding: 18px 0; }
+      .links { gap: 13px; font-size: 11px; }
       .hero {
         grid-template-columns: 1fr;
-        padding: 60px 0 35px;
-        gap: 30px;
+        min-height: auto;
+        gap: 34px;
+        padding: 62px 0 40px;
       }
-
-      .hero h1 { letter-spacing: -2px; }
-      .visual { min-height: 230px; }
-      .orb { width: 130px; height: 130px; }
-      .orb::after {
-        width: 55px;
-        height: 55px;
-        transform: translate(56px, 18px);
-      }
-
+      h1 { font-size: clamp(56px, 14vw, 82px); }
+      .art { min-height: 300px; }
       section { padding: 38px 0; }
-      .about, .projects { grid-template-columns: 1fr; }
-      .section-top { align-items: start; flex-direction: column; }
-      .panel, .project { padding: 22px; }
+      .section-head { align-items: start; flex-direction: column; }
+      .about-grid, .project-grid { grid-template-columns: 1fr; }
+      .card { padding: 23px; }
+      .project { min-height: 220px; }
+      .contact { margin: 25px 0 48px; }
       footer { flex-direction: column; }
+    }
+
+    @media (max-width: 390px) {
+      .links { gap: 9px; font-size: 10px; }
+      .brand { font-size: 15px; }
+      .wrap { width: calc(100% - 26px); }
     }
 
     @media (prefers-reduced-motion: reduce) {
@@ -348,10 +411,10 @@
 </head>
 <body>
   <header class="wrap">
-    <nav>
-      <a class="logo" href="#home">YUKI<span>.</span></a>
-      <div class="nav-links">
-        <a href="#about">关于我</a>
+    <nav class="nav" aria-label="主导航">
+      <a class="brand" href="#home">YUKI<span>.</span></a>
+      <div class="links">
+        <a href="#about">关于</a>
         <a href="#projects">项目</a>
         <a href="#journey">经历</a>
         <a href="#contact">联系</a>
@@ -361,167 +424,175 @@
 
   <main class="wrap">
     <section class="hero" id="home">
-      <div>
-        <div class="eyebrow">Portfolio · 2026</div>
-        <h1>你好，<br>我是 <span class="accent">Yuki.</span></h1>
+      <div class="hero-copy">
+        <div class="kicker">Personal Portfolio · 2026</div>
+        <h1>
+          <span class="line">Ideas</span>
+          <span class="line">into</span>
+          <span class="line gradient">Impact.</span>
+        </h1>
         <p class="intro">
-          一名关注新能源材料与电池技术的研究生。
-          我喜欢探索材料与设计之间的可能性，
-          也乐于把复杂的问题拆解成清晰、可执行的方案。
+          你好，我是 Yuki。一名关注新能源材料与电池技术的研究生。
+          我喜欢探索材料、结构与性能之间的联系，也相信每一个复杂问题，
+          都值得被认真理解、拆解和解决。
         </p>
         <div class="actions">
-          <a class="btn primary" href="#projects">探索我的项目 ↘</a>
-          <a class="btn" href="#contact">联系我 ↗</a>
+          <a class="btn primary" href="#projects">探索我的项目 <span>↘</span></a>
+          <a class="btn" href="#contact">与我联系 <span>↗</span></a>
         </div>
       </div>
 
-      <div class="visual" aria-label="抽象渐变视觉图形">
-        <div class="orb"></div>
-        <div class="visual-label">IDEAS INTO REALITY</div>
+      <div class="art" role="img" aria-label="蓝色与淡紫色抽象渐变艺术图形">
+        <div class="orbit"></div>
+        <div class="art-label">
+          <span>FORM / FUNCTION</span>
+          <span>01 — 04</span>
+        </div>
       </div>
     </section>
 
     <section id="about">
-      <div class="section-top">
+      <div class="section-head">
         <div>
-          <div class="eyebrow">01 / About</div>
+          <div class="section-index">01 / About</div>
           <h2>关于我</h2>
         </div>
-        <p>Curious mind. Practical approach.</p>
+        <p class="section-note">Curiosity drives progress.</p>
       </div>
 
-      <div class="about">
-        <article class="panel">
-          <h3>研究 · Research</h3>
+      <div class="about-grid">
+        <article class="card">
+          <h3>Research · 科研</h3>
           <p>
-            关注电池材料、界面调控与粘结剂设计，
-            希望通过实验、表征和数据分析，
-            理解材料结构与电化学性能之间的联系。
+            聚焦电池材料、硅基负极与粘结剂设计。
+            通过材料制备、电化学测试和多尺度表征，
+            探索界面调控与电极性能之间的关系。
           </p>
-          <div class="tags">
-            <span class="tag">电池材料</span>
-            <span class="tag">硅基负极</span>
-            <span class="tag">界面表征</span>
+          <div class="chips">
+            <span class="chip">Battery Materials</span>
+            <span class="chip">Silicon Anode</span>
+            <span class="chip">Interface Design</span>
           </div>
         </article>
 
-        <article class="panel">
-          <h3>成长 · Beyond Research</h3>
+        <article class="card">
+          <h3>Beyond Research · 成长</h3>
           <p>
-            重视团队协作、问题分析与执行力。
-            在科研之外，我也热爱运动，
-            相信持续练习和团队配合能带来进步。
+            重视团队协作、逻辑分析与执行力。
+            在科研之外，我也热爱篮球，
+            享受共同训练、持续进步与团队配合。
           </p>
-          <div class="tags">
-            <span class="tag">Problem Solving</span>
-            <span class="tag">Teamwork</span>
-            <span class="tag">Basketball</span>
+          <div class="chips">
+            <span class="chip">Problem Solving</span>
+            <span class="chip">Teamwork</span>
+            <span class="chip">Basketball</span>
           </div>
         </article>
       </div>
     </section>
 
     <section id="projects">
-      <div class="section-top">
+      <div class="section-head">
         <div>
-          <div class="eyebrow">02 / Selected Work</div>
+          <div class="section-index">02 / Selected Work</div>
           <h2>精选项目</h2>
         </div>
-        <p>From experiments to insights.</p>
+        <p class="section-note">Research with purpose.</p>
       </div>
 
-      <div class="projects">
-        <article class="project">
-          <div class="project-num">PROJECT 01</div>
+      <div class="project-grid">
+        <article class="card project">
+          <div class="project-no">PROJECT 01</div>
           <h3>全固态硅负极双导粘结剂</h3>
           <p>
-            探索电子传导与锂离子传输协同的粘结剂设计，
-            结合电化学测试和多尺度表征，研究电极界面与循环稳定性。
+            设计兼具电子传导与锂离子传输能力的粘结剂体系，
+            研究电极界面稳定性、机械完整性与循环性能。
           </p>
-          <div class="tags">
-            <span class="tag">固态电池</span>
-            <span class="tag">硅负极</span>
-            <span class="tag">电化学</span>
+          <div class="chips">
+            <span class="chip">Solid-State Battery</span>
+            <span class="chip">Conductive Binder</span>
           </div>
         </article>
 
-        <article class="project">
-          <div class="project-num">PROJECT 02</div>
+        <article class="card project">
+          <div class="project-no">PROJECT 02</div>
           <h3>硅碳负极聚合物粘结剂</h3>
           <p>
-            通过聚合物组成与界面相互作用设计，
-            探索粘附能力、结构稳定性与硅碳电极性能之间的关系。
+            通过聚合物组成和界面相互作用设计，
+            探索粘附能力、结构稳定性与电化学表现之间的联系。
           </p>
-          <div class="tags">
-            <span class="tag">聚合物设计</span>
-            <span class="tag">界面化学</span>
-            <span class="tag">材料表征</span>
+          <div class="chips">
+            <span class="chip">Polymer Design</span>
+            <span class="chip">Silicon-Carbon</span>
           </div>
         </article>
 
-        <article class="project">
-          <div class="project-num">PROJECT 03</div>
+        <article class="card project">
+          <div class="project-no">PROJECT 03</div>
           <h3>水系锌碘电池粘结剂</h3>
           <p>
             探索功能聚合物在水系电池正极中的应用，
-            关注粘附作用与碘物种界面相互作用。
+            关注电极粘附、碘物种相互作用与活性物质保持。
           </p>
-          <div class="tags">
-            <span class="tag">水系电池</span>
-            <span class="tag">功能聚合物</span>
-            <span class="tag">专利探索</span>
+          <div class="chips">
+            <span class="chip">Aqueous Battery</span>
+            <span class="chip">Functional Polymer</span>
           </div>
         </article>
 
-        <article class="project">
-          <div class="project-num">PROJECT 04</div>
-          <h3>实验分析与失效研究</h3>
+        <article class="card project">
+          <div class="project-no">PROJECT 04</div>
+          <h3>电化学与界面分析</h3>
           <p>
-            结合阻抗分析、光谱表征和循环性能，
-            从数据中识别问题线索，并尝试建立合理的机理解释。
+            综合阻抗、光谱和循环测试结果，
+            分析材料变化与电池性能之间的关系，寻找失效线索。
           </p>
-          <div class="tags">
-            <span class="tag">EIS</span>
-            <span class="tag">XPS / Raman</span>
-            <span class="tag">数据分析</span>
+          <div class="chips">
+            <span class="chip">EIS</span>
+            <span class="chip">XPS / Raman</span>
           </div>
         </article>
       </div>
     </section>
 
     <section id="journey">
-      <div class="section-top">
+      <div class="section-head">
         <div>
-          <div class="eyebrow">03 / Journey</div>
-          <h2>我的经历</h2>
+          <div class="section-index">03 / Journey</div>
+          <h2>成长轨迹</h2>
         </div>
       </div>
 
-      <div class="panel timeline">
-        <div class="timeline-item">
-          <h3>研究生阶段 · 电池材料研究</h3>
-          <p>聚焦负极粘结剂设计、电极界面调控与电化学性能研究。</p>
-        </div>
-        <div class="timeline-item">
-          <h3>实验与项目实践</h3>
-          <p>参与材料制备、结构表征、电化学测试与实验数据分析。</p>
-        </div>
-        <div class="timeline-item">
-          <h3>团队协作 · 篮球</h3>
-          <p>校女篮队长；曾获 2023 年黑龙江省大学生运动会女篮亚军。</p>
+      <div class="card">
+        <div class="timeline">
+          <div class="timeline-item">
+            <h3>研究生阶段 · 电池材料研究</h3>
+            <p>开展负极粘结剂设计、电极界面调控及电化学性能研究。</p>
+          </div>
+          <div class="timeline-item">
+            <h3>实验实践 · 表征与分析</h3>
+            <p>参与材料制备、光谱分析、阻抗测试与实验数据解释。</p>
+          </div>
+          <div class="timeline-item">
+            <h3>团队协作 · 女篮</h3>
+            <p>女篮校队队长；曾获 2023 年黑龙江省大学生运动会女篮亚军。</p>
+          </div>
         </div>
       </div>
     </section>
 
     <section id="contact">
       <div class="contact">
-        <div class="eyebrow">04 / Contact</div>
-        <h2>让我们保持联系。</h2>
-        <p>欢迎交流电池材料、科研想法与职业发展。</p>
-        <!-- 将下面的示例邮箱替换成你自己的邮箱 -->
-        <a class="btn primary"
-           href="mailto:13981176747@163.com">给我发邮件 ↗</a>
-        <p style="font-size:12px;margin-top:18px">
+        <div class="section-index">04 / Contact</div>
+        <h2>Good ideas start with a conversation.</h2>
+        <p>欢迎交流科研想法、电池材料与未来的可能性。</p>
+        <div class="actions">
+          <!-- 请将示例邮箱替换为你自己的邮箱 -->
+          <a class="btn primary" href="mailto:your-email@example.com">
+            给我发邮件 ↗
+          </a>
+        </div>
+        <p style="font-size:12px;margin-top:20px">
           Email: your-email@example.com
         </p>
       </div>
