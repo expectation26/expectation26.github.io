@@ -1,0 +1,81 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="theme-color" content="#0b0d14">
+<title>莫小菇的孢子漫游 · MOXIAOGU</title>
+<style>
+:root{color-scheme:dark;--bg:#0b0d14;--panel:#151a29;--line:#ffffff20;--muted:#aab2c8;--blue:#8bb8ff;--purple:#c7a8ff}
+*{box-sizing:border-box}body{margin:0;min-height:100vh;background:radial-gradient(ellipse at 50% 0%,#34316b55,transparent 55%),var(--bg);color:#f7f7ff;font-family:Inter,-apple-system,BlinkMacSystemFont,"Segoe UI","PingFang SC","Microsoft YaHei",sans-serif;display:grid;place-items:center;padding:24px}
+main{width:min(960px,100%)}a{color:var(--blue);text-decoration:none}.top{display:flex;justify-content:space-between;align-items:center;gap:16px;margin-bottom:18px}.eyebrow{font-size:11px;letter-spacing:3px;color:var(--blue);text-transform:uppercase}.back{font-size:13px;color:var(--muted)}h1{font-size:clamp(28px,5vw,48px);letter-spacing:-1.8px;margin:7px 0}.subtitle{color:var(--muted);margin:0 0 22px;font-size:14px}.game-shell{border:1px solid var(--line);border-radius:24px;overflow:hidden;background:#101421;box-shadow:0 25px 90px #0006}.hud{display:flex;justify-content:space-between;align-items:center;gap:12px;padding:15px 18px;background:#ffffff05;border-bottom:1px solid var(--line);font-size:12px;color:var(--muted)}.stats{display:flex;gap:20px;flex-wrap:wrap}.stats strong{display:block;color:white;font-size:19px;font-variant-numeric:tabular-nums}.game-area{position:relative}.game-area canvas{display:block;width:100%;height:auto;aspect-ratio:16/9;touch-action:none;background:#101729}.overlay{position:absolute;inset:0;display:grid;place-items:center;padding:22px;background:#080b16b8;backdrop-filter:blur(7px);text-align:center}.overlay.hidden{display:none}.modal{max-width:440px}.mascot{font-size:68px;filter:drop-shadow(0 0 25px #9e9aff66);margin-bottom:8px}.modal h2{font-size:clamp(25px,4vw,38px);margin:0 0 10px}.modal p{color:#c0c6dc;line-height:1.8;font-size:14px}.btn{appearance:none;border:1px solid #ffffff30;background:#ffffff0a;color:white;border-radius:100px;padding:12px 20px;font-size:13px;font-weight:700;cursor:pointer;transition:.2s}.btn:hover{transform:translateY(-2px);border-color:var(--purple)}.btn.primary{background:linear-gradient(110deg,#8bb8ff,#c7a8ff);color:#111426;border:0}.tips{display:flex;justify-content:space-between;gap:15px;padding:14px 18px;color:var(--muted);font-size:12px;flex-wrap:wrap}.tips kbd{border:1px solid #ffffff2a;border-radius:5px;padding:2px 6px;color:#e8eaff;background:#ffffff08}.footer{text-align:center;color:#777f99;font-size:11px;margin-top:18px}@media(max-width:560px){body{padding:14px}.top{align-items:flex-start}.hud{align-items:flex-start}.stats{gap:13px}.stats strong{font-size:16px}.tips{line-height:1.8}.game-area canvas{aspect-ratio:4/5}.back{white-space:nowrap}}
+</style>
+</head>
+<body><main>
+<header class="top"><div><div class="eyebrow">MOXIAOGU · SPORE DRIFT</div><h1>莫小菇的孢子漫游</h1></div><a class="back" href="./">← 返回个人主页</a></header>
+<p class="subtitle">在星雾之间收集发光孢子，避开被污染的暗色孢子。准备好开始一场 45 秒的小小冒险了吗？</p>
+<section class="game-shell" aria-label="孢子漫游游戏">
+<div class="hud"><div class="stats"><div>得分<strong id="score">000</strong></div><div>剩余时间<strong id="time">45</strong></div><div>连击 COMBO<strong id="combo">×0</strong></div></div><div>最高分 <strong id="best" style="display:inline;font-size:14px">0</strong></div></div>
+<div class="game-area"><canvas id="game" width="960" height="540" aria-label="游戏区域，使用方向键移动莫小菇"></canvas>
+<div class="overlay" id="overlay"><div class="modal"><div class="mascot" id="modalMascot">🍄</div><div class="eyebrow">A LITTLE COSMIC ADVENTURE</div><h2 id="modalTitle">准备好出发了吗？</h2><p id="modalText">移动莫小菇，收集蓝紫色的光之孢子。金色孢子分数更高，碰到暗色污染孢子会打断连击。</p><button class="btn primary" id="start">开始漫游 ↗</button><p style="font-size:11px;margin-bottom:0">方向键 / WASD 移动 · 鼠标或触屏也可以</p></div></div></div>
+<div class="tips"><span>✦ 收集光之孢子 <b style="color:#b8a7ff">+10</b>　✦ 金色稀有孢子 <b style="color:#ffe0a0">+30</b></span><span><kbd>←</kbd> <kbd>↑</kbd> <kbd>↓</kbd> <kbd>→</kbd> 或 <kbd>W</kbd><kbd>A</kbd><kbd>S</kbd><kbd>D</kbd></span></div>
+</section><div class="footer">MADE WITH CURIOSITY · YUKI'S PORTFOLIO · 2026</div>
+</main>
+<script>
+(()=>{
+const canvas=document.getElementById('game'),ctx=canvas.getContext('2d');
+const $=id=>document.getElementById(id);
+const W=960,H=540,keys=new Set();
+let state='ready',score=0,combo=0,timeLeft=45,last=0,spawn=0,items=[],particles=[],stars=[],raf=0;
+let best=0;try{best=Number(localStorage.getItem('moxiao-best')||0)}catch(e){}
+$('best').textContent=best;
+const player={x:W/2,y:H-95,r:27,speed:330,invuln:0};
+for(let i=0;i<110;i++)stars.push({x:Math.random()*W,y:Math.random()*H,r:Math.random()*1.7+.3,a:Math.random()*.65+.15,p:Math.random()*6});
+function resizeDraw(){if(state!=='playing')draw(0)}
+function spawnItem(){const rare=Math.random()<.13,bad=!rare&&Math.random()<Math.min(.25,.1+(45-timeLeft)*.003);items.push({x:35+Math.random()*(W-70),y:-25,r:rare?13:bad?15:11,vy:(rare?105:bad?150:120)+Math.random()*55,type:rare?'rare':bad?'bad':'good',spin:Math.random()*6})}
+function burst(x,y,color,n=12){for(let i=0;i<n;i++){let a=Math.random()*Math.PI*2,s=35+Math.random()*180;particles.push({x,y,vx:Math.cos(a)*s,vy:Math.sin(a)*s,life:.45+Math.random()*.5,max:.95,color,r:2+Math.random()*3})}}
+function rounded(x,y,w,h,r){ctx.beginPath();ctx.roundRect(x,y,w,h,r)}
+function draw(dt){
+ ctx.clearRect(0,0,W,H);
+ const g=ctx.createRadialGradient(W*.5,H*.15,5,W*.5,H*.4,W*.8);g.addColorStop(0,'#27264e');g.addColorStop(1,'#0d1423');ctx.fillStyle=g;ctx.fillRect(0,0,W,H);
+ for(const s of stars){ctx.globalAlpha=s.a*(.7+.3*Math.sin(performance.now()*.001+s.p));ctx.fillStyle='#d8ddff';ctx.beginPath();ctx.arc(s.x,s.y,s.r,0,Math.PI*2);ctx.fill()}ctx.globalAlpha=1;
+ // distant drifting nebulae
+ for(let i=0;i<4;i++){ctx.fillStyle=i%2?'#7477ff08':'#8dd8ff08';ctx.beginPath();ctx.ellipse(130+i*245,150+Math.sin(performance.now()*.0003+i)*45,170,45,-.3+i*.12,0,Math.PI*2);ctx.fill()}
+ for(const it of items){ctx.save();ctx.translate(it.x,it.y);it.spin+=dt*.8;ctx.rotate(Math.sin(it.spin)*.15);
+ const color=it.type==='rare'?'#ffe3a0':it.type==='bad'?'#ff718f':'#a8a0ff';
+ ctx.shadowBlur=it.type==='bad'?18:22;ctx.shadowColor=color;ctx.fillStyle=color+'28';ctx.beginPath();ctx.arc(0,0,it.r*1.8,0,Math.PI*2);ctx.fill();ctx.fillStyle=color;ctx.beginPath();ctx.arc(0,0,it.r*.55,0,Math.PI*2);ctx.fill();ctx.fillStyle='#fff';ctx.globalAlpha=.8;ctx.beginPath();ctx.arc(-it.r*.2,-it.r*.2,it.r*.16,0,Math.PI*2);ctx.fill();ctx.restore();ctx.globalAlpha=1}
+ for(const p of particles){ctx.globalAlpha=Math.max(0,p.life/p.max);ctx.fillStyle=p.color;ctx.beginPath();ctx.arc(p.x,p.y,p.r,0,Math.PI*2);ctx.fill()}ctx.globalAlpha=1;
+ // player glow
+ ctx.save();ctx.translate(player.x,player.y);
+ const halo=ctx.createRadialGradient(0,0,2,0,0,55);halo.addColorStop(0,'#bca8ff40');halo.addColorStop(1,'#bca8ff00');ctx.fillStyle=halo;ctx.beginPath();ctx.arc(0,0,55,0,Math.PI*2);ctx.fill();
+ ctx.shadowColor='#b5a3ff';ctx.shadowBlur=player.invuln>0?28:15;
+ // placeholder mushroom; user artwork can be dropped at assets/moxiaogu.png
+ if(window.moxiaoImage&&window.moxiaoImage.complete&&window.moxiaoImage.naturalWidth){ctx.drawImage(window.moxiaoImage,-35,-43,70,86)}
+ else{ctx.font='58px serif';ctx.textAlign='center';ctx.textBaseline='middle';ctx.fillText('🍄',0,0)}
+ ctx.restore();ctx.globalAlpha=1;
+ if(state==='playing'){ctx.fillStyle='#ffffff18';rounded(22,20,150,4,2);ctx.fill();ctx.fillStyle='#b9a8ff';rounded(22,20,150*Math.max(0,timeLeft/45),4,2);ctx.fill()}
+}
+function update(dt){
+ if(state!=='playing')return;
+ timeLeft=Math.max(0,timeLeft-dt);player.invuln=Math.max(0,player.invuln-dt);
+ let dx=(keys.has('ArrowRight')||keys.has('d')||keys.has('D')?1:0)-(keys.has('ArrowLeft')||keys.has('a')||keys.has('A')?1:0);
+ let dy=(keys.has('ArrowDown')||keys.has('s')||keys.has('S')?1:0)-(keys.has('ArrowUp')||keys.has('w')||keys.has('W')?1:0);
+ if(dx||dy){let len=Math.hypot(dx,dy);player.x+=dx/len*player.speed*dt;player.y+=dy/len*player.speed*dt}
+ player.x=Math.max(30,Math.min(W-30,player.x));player.y=Math.max(38,Math.min(H-38,player.y));
+ spawn+=dt;const interval=Math.max(.24,.72-(45-timeLeft)*.008);if(spawn>interval){spawn=0;spawnItem();if(Math.random()<.17)spawnItem()}
+ for(let i=items.length-1;i>=0;i--){const it=items[i];it.y+=it.vy*dt;if(Math.hypot(it.x-player.x,it.y-player.y)<it.r+25){if(it.type==='bad'){combo=0;player.invuln=.35;burst(it.x,it.y,'#ff718f',9)}else{combo++;score+=(it.type==='rare'?30:10)+Math.min(combo,10)*2;burst(it.x,it.y,it.type==='rare'?'#ffe3a0':'#b9a8ff',10)}items.splice(i,1);updateHUD()}else if(it.y>H+30)items.splice(i,1)}
+ for(let i=particles.length-1;i>=0;i--){const p=particles[i];p.x+=p.vx*dt;p.y+=p.vy*dt;p.vx*=.98;p.vy*=.98;p.life-=dt;if(p.life<=0)particles.splice(i,1)}
+ if(timeLeft<=0)endGame();
+}
+function updateHUD(){$('score').textContent=String(score).padStart(3,'0');$('time').textContent=Math.ceil(timeLeft);$('combo').textContent='×'+combo}
+function loop(now){const dt=Math.min((now-last)/1000||0,.033);last=now;update(dt);draw(dt);if(state==='playing')raf=requestAnimationFrame(loop)}
+function startGame(){cancelAnimationFrame(raf);score=0;combo=0;timeLeft=45;spawn=0;items=[];particles=[];player.x=W/2;player.y=H-95;player.invuln=0;state='playing';$('overlay').classList.add('hidden');updateHUD();last=performance.now();raf=requestAnimationFrame(loop)}
+function endGame(){state='over';if(score>best){best=score;try{localStorage.setItem('moxiao-best',String(best))}catch(e){}$('best').textContent=best}$('modalMascot').textContent=score>=300?'🌟':'🍄';$('modalTitle').textContent=score>=300?'孢子大师！':'漫游结束';$('modalText').textContent='本次收集 '+score+' 分。'+(score>best?'新纪录诞生！':'')+' 每一颗微光，都让这片星雾更明亮。';$('start').textContent='再玩一次 ↻';$('overlay').classList.remove('hidden');draw(0)}
+$('start').addEventListener('click',startGame);
+window.addEventListener('keydown',e=>{if(['ArrowUp','ArrowDown','ArrowLeft','ArrowRight',' '].includes(e.key))e.preventDefault();keys.add(e.key);if((e.key==='Enter'||e.key===' ')&&state!=='playing')startGame()});
+window.addEventListener('keyup',e=>keys.delete(e.key));window.addEventListener('blur',()=>keys.clear());
+function pointerMove(e){if(state!=='playing')return;const r=canvas.getBoundingClientRect();player.x=Math.max(30,Math.min(W-30,(e.clientX-r.left)/r.width*W));player.y=Math.max(38,Math.min(H-38,(e.clientY-r.top)/r.height*H))}
+canvas.addEventListener('pointermove',pointerMove);canvas.addEventListener('pointerdown',e=>{if(state==='playing')pointerMove(e)});
+draw(0);
+})();
+</script></body></html>
