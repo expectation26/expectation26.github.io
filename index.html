@@ -317,6 +317,26 @@
 
     .project h3 { margin-top: 22px; }
 
+    .project-link {
+      display: inline-flex;
+      align-items: center;
+      gap: 9px;
+      margin-top: 20px;
+      padding: 8px 13px;
+      border: 1px solid rgba(162,180,255,.24);
+      border-radius: 999px;
+      color: #d9def5;
+      background: rgba(130,149,255,.07);
+      font-size: 11px;
+      font-weight: 700;
+      transition: transform .2s, border-color .2s, background .2s;
+    }
+    .project-link:hover {
+      transform: translateY(-2px);
+      border-color: rgba(162,180,255,.58);
+      background: rgba(130,149,255,.14);
+    }
+
     .timeline {
       border-left: 1px solid rgba(170,183,255,.3);
       margin-left: 7px;
@@ -499,7 +519,7 @@
           <div class="section-index">02 / Selected Work</div>
           <h2>精选项目</h2>
         </div>
-        <p class="section-note">Research with purpose.</p>
+        <p class="section-note">Product thinking · Design · Build.</p>
       </div>
 
       <div class="project-grid">
@@ -530,29 +550,35 @@
         </article>
 
         <article class="card project">
-          <div class="project-no">PROJECT 03</div>
-          <h3>水系锌碘电池粘结剂</h3>
+          <div class="project-no">PROJECT 03 · PRODUCT / INTERACTION</div>
+          <h3>莫小菇的孢子漫游｜小游戏设计与开发</h3>
           <p>
-            探索功能聚合物在水系电池正极中的应用，
-            关注电极粘附、碘物种相互作用与活性物质保持。
+            以原创角色概念为起点，设计 45 秒孢子收集玩法与完整游戏流程，
+            将规则、得分/连击反馈、倒计时和失败重开转化为可玩的网页原型；
+            支持键盘、鼠标与触屏操作，并兼顾移动端布局。
           </p>
           <div class="chips">
-            <span class="chip">Aqueous Battery</span>
-            <span class="chip">Functional Polymer</span>
+            <span class="chip">产品设计</span>
+            <span class="chip">交互设计</span>
+            <span class="chip">HTML / CSS / JS</span>
           </div>
+          <a class="project-link" href="game.html">试玩小游戏原型 <span>↗</span></a>
         </article>
 
         <article class="card project">
-          <div class="project-no">PROJECT 04</div>
-          <h3>电化学与界面分析</h3>
+          <div class="project-no">PROJECT 04 · PRODUCT / ANALYSIS</div>
+          <h3>竞品分析工作台｜体验对比与决策支持</h3>
           <p>
-            综合阻抗、光谱和循环测试结果，
-            分析材料变化与电池性能之间的关系，寻找失效线索。
+            搭建可编辑的竞品对比模型，支持自定义产品、体验维度与权重，
+            实时计算加权得分并汇总差异。以演示数据呈现分析方法，
+            可扩展为 AI 工具、内容社区或消费产品的真实体验研究。
           </p>
           <div class="chips">
-            <span class="chip">EIS</span>
-            <span class="chip">XPS / Raman</span>
+            <span class="chip">竞品分析</span>
+            <span class="chip">数据可视化</span>
+            <span class="chip">产品策略</span>
           </div>
+          <a class="project-link" href="compare-lab.html">打开交互分析工作台 <span>↗</span></a>
         </article>
       </div>
     </section>
