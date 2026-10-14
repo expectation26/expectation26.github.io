@@ -1,0 +1,159 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="theme-color" content="#0b0d14">
+<meta name="description" content="求职投递管理台概念项目：岗位记录、流程追踪、筛选、浏览器本地保存与 CSV 导出。">
+<title>求职投递管理台 · Yuki Portfolio</title>
+<style>
+:root{--bg:#0b0d14;--panel:#141a29;--panel2:#1b2134;--line:rgba(255,255,255,.12);--text:#f5f6ff;--muted:#a5aec4;--blue:#8bb8ff;--purple:#c6a5ff;--mint:#8fe3d1;--amber:#f4ce8a;--red:#ff9cae}
+*{box-sizing:border-box}body{margin:0;background:radial-gradient(ellipse at 80% 0%,#38316840,transparent 38%),var(--bg);color:var(--text);font-family:Inter,-apple-system,BlinkMacSystemFont,"Segoe UI","PingFang SC","Microsoft YaHei",sans-serif;line-height:1.65}
+a{color:inherit;text-decoration:none}.wrap{width:min(1120px,calc(100% - 36px));margin:auto}.nav{display:flex;align-items:center;justify-content:space-between;padding:21px 0;border-bottom:1px solid var(--line);font-size:13px;color:var(--muted)}.brand{color:var(--text);font-weight:800;letter-spacing:1.8px}.brand span{color:var(--blue)}.nav a:hover{color:white}
+.hero{padding:42px 0 24px;display:flex;justify-content:space-between;align-items:end;gap:24px}.eyebrow{font-size:10px;letter-spacing:2.5px;text-transform:uppercase;color:var(--blue)}h1{font-size:clamp(32px,5vw,54px);line-height:1.13;letter-spacing:-1.6px;margin:10px 0}.grad{background:linear-gradient(100deg,#8bb8ff,#d0aaff);color:transparent;background-clip:text;-webkit-background-clip:text}.lead{color:var(--muted);font-size:13px;max-width:680px;margin:0}.buttons{display:flex;gap:9px;flex-wrap:wrap}.btn{border:1px solid var(--line);background:#ffffff08;color:var(--text);border-radius:999px;padding:10px 15px;font-size:12px;font-weight:750;cursor:pointer;white-space:nowrap}.btn:hover{transform:translateY(-1px);border-color:#a8b6ff77}.btn.primary{background:linear-gradient(100deg,#8bb8ff,#c6a5ff);color:#131624;border:0}
+.metrics{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:12px;margin:14px 0 21px}.metric{padding:17px;border:1px solid var(--line);border-radius:15px;background:linear-gradient(145deg,#171d2c,#10141f)}.metric small{font-size:11px;color:var(--muted)}.metric strong{display:block;font-size:29px;letter-spacing:-.8px;line-height:1.4;font-variant-numeric:tabular-nums}.metric span{font-size:10px;color:#929cb6}
+.toolbar{display:flex;align-items:center;gap:10px;flex-wrap:wrap;padding:13px;border:1px solid var(--line);border-radius:15px;background:#ffffff04;margin-bottom:14px}.search{flex:1;min-width:180px}.field,select,textarea{width:100%;color:var(--text);background:#0e1220;border:1px solid var(--line);border-radius:9px;padding:10px 11px;font:inherit;font-size:12px;outline:none}.field:focus,select:focus,textarea:focus{border-color:#91b5ff90}select option{background:#151a29}.toolbar select{width:auto;min-width:125px}.result-count{font-size:11px;color:var(--muted);margin-left:auto}
+.layout{display:grid;grid-template-columns:minmax(0,1.35fr) minmax(265px,.65fr);gap:14px;align-items:start}.panel{border:1px solid var(--line);border-radius:17px;background:linear-gradient(145deg,#171d2c,#10141f);padding:18px;min-width:0}.panel-head{display:flex;align-items:center;justify-content:space-between;gap:10px;margin-bottom:14px}.panel-head h2{font-size:15px;margin:0}.panel-head small{color:var(--muted);font-size:10px}
+.app-list{display:grid;gap:10px}.app-card{padding:15px;border:1px solid var(--line);border-radius:13px;background:#ffffff03;transition:border-color .2s}.app-card:hover{border-color:#a3b2ff55}.card-head{display:flex;justify-content:space-between;align-items:flex-start;gap:12px}.company{font-size:16px;font-weight:800;letter-spacing:-.2px}.role{color:#c0c8df;font-size:12px;margin-top:2px}.subline{color:var(--muted);font-size:10px;margin-top:7px}.tag{display:inline-flex;align-items:center;border-radius:7px;padding:4px 8px;font-size:10px;white-space:nowrap;border:1px solid transparent}.st-pending{color:#b8cfff;background:#8bb8ff14;border-color:#8bb8ff25}.st-applied{color:#c9b7ff;background:#c6a5ff14;border-color:#c6a5ff25}.st-test{color:#f4d39b;background:#f4ce8a12;border-color:#f4ce8a25}.st-interview{color:#93e4d3;background:#8fe3d114;border-color:#8fe3d125}.st-offer{color:#a8f2c4;background:#8be9ae14;border-color:#8be9ae25}.st-rejected{color:#ffacbc;background:#ff9cae12;border-color:#ff9cae25}.meta-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:13px}.meta{padding:8px 10px;background:#ffffff04;border-radius:9px;min-width:0}.meta small{display:block;font-size:9px;color:#8690aa;letter-spacing:.3px}.meta strong{display:block;font-size:11px;font-weight:600;overflow-wrap:anywhere;margin-top:2px}.card-foot{display:flex;justify-content:space-between;align-items:center;gap:10px;flex-wrap:wrap;margin-top:12px;padding-top:11px;border-top:1px solid #ffffff0e}.next-action{font-size:11px;color:#d5dbef;max-width:72%;overflow-wrap:anywhere}.mini-actions{display:flex;align-items:center;gap:7px}.mini-btn{background:none;border:1px solid var(--line);color:var(--muted);border-radius:7px;padding:5px 8px;font-size:10px;cursor:pointer}.mini-btn:hover{color:white;border-color:#91b5ff77}.priority{color:var(--amber);font-size:10px}
+.empty{text-align:center;color:var(--muted);padding:38px 16px;font-size:12px}.empty b{display:block;color:var(--text);font-size:14px;margin-bottom:5px}
+.form-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px}.form-item{min-width:0}.form-item.full{grid-column:1/-1}.form-item label{display:block;font-size:10px;color:#b5bfd5;margin:0 0 5px}.form-item textarea{min-height:70px;resize:vertical}.form-actions{display:flex;justify-content:flex-end;gap:8px;margin-top:14px}.required{color:var(--red)}.note{font-size:10px;color:#8590a9;line-height:1.8;margin-top:12px}.side-section+.side-section{border-top:1px solid var(--line);margin-top:18px;padding-top:17px}
+.status-bars{display:grid;gap:11px}.status-row{display:grid;grid-template-columns:78px 1fr 20px;align-items:center;gap:7px;font-size:10px;color:var(--muted)}.bar{height:6px;border-radius:9px;background:#ffffff0e;overflow:hidden}.fill{height:100%;border-radius:9px;background:linear-gradient(90deg,#8bb8ff,#c6a5ff);width:0;transition:width .3s}.status-row strong{text-align:right;color:#e9ecfa;font-size:10px}
+.tips{display:grid;gap:11px}.tip{display:flex;gap:10px;align-items:flex-start}.tip-icon{display:grid;place-items:center;flex:0 0 28px;height:28px;border-radius:9px;background:#9e9dff13;color:var(--purple);font-size:13px}.tip b{display:block;font-size:11px}.tip p{font-size:10px;color:var(--muted);margin:2px 0 0}
+.case-foot{padding:19px 0 35px;display:flex;align-items:center;justify-content:space-between;gap:12px;border-top:1px solid var(--line);margin-top:22px;color:var(--muted);font-size:10px}.modal-backdrop{position:fixed;inset:0;z-index:10;display:none;align-items:center;justify-content:center;padding:16px;background:#05070dc9;backdrop-filter:blur(9px)}.modal-backdrop.open{display:flex}.modal{width:min(620px,100%);max-height:min(90vh,850px);overflow:auto;border:1px solid var(--line);border-radius:18px;background:#151a29;padding:21px;box-shadow:0 30px 90px #0009}.modal-head{display:flex;justify-content:space-between;align-items:center;margin-bottom:16px}.modal-head h2{font-size:18px;margin:0}.xbtn{border:1px solid var(--line);background:none;color:var(--muted);border-radius:8px;padding:5px 9px;cursor:pointer}
+@media(max-width:840px){.hero{align-items:flex-start;flex-direction:column}.metrics{grid-template-columns:repeat(3,minmax(0,1fr))}.layout{grid-template-columns:1fr}.sidebar{display:grid;grid-template-columns:1fr 1fr;gap:12px}.side-section+.side-section{border-top:0;margin-top:0;padding-top:0}}
+@media(max-width:560px){.wrap{width:calc(100% - 24px)}.nav{padding:17px 0}.hero{padding-top:31px}.metrics{grid-template-columns:repeat(2,minmax(0,1fr));gap:8px}.metric{padding:13px}.metric strong{font-size:25px}.metric:last-child{grid-column:1/-1}.toolbar{align-items:stretch}.toolbar select{flex:1}.result-count{width:100%;margin-left:0}.panel{padding:13px}.sidebar{grid-template-columns:1fr}.side-section+.side-section{border-top:1px solid var(--line);margin-top:14px;padding-top:14px}.card-head{gap:8px}.meta-grid{gap:6px}.company{font-size:15px}.form-grid{grid-template-columns:1fr}.form-item.full{grid-column:auto}.case-foot{align-items:flex-start;flex-direction:column}}
+</style>
+</head>
+<body>
+<div class="wrap">
+<nav class="nav"><a class="brand" href="./">YUKI<span>.</span></a><a href="./">← 返回个人主页</a></nav>
+<header class="hero">
+<div><div class="eyebrow">PROJECT 04 · PRODUCTIVITY / FRONT-END</div><h1>把求职进度，<br><span class="grad">整理成一个工作台。</span></h1><p class="lead">一个轻量化求职投递管理工具：集中记录公司、岗位、流程状态和下一步行动，通过状态流转、关键字筛选、进度统计与 CSV 导出，把零散的求职任务变成清晰、可追踪的工作流。</p></div>
+<div class="buttons"><button class="btn primary" id="addTop">＋ 新增投递</button><button class="btn" id="exportTop">导出 CSV ↗</button></div>
+</header>
+<section class="metrics" aria-label="求职统计">
+<div class="metric"><small>全部记录</small><strong id="mTotal">0</strong><span>已保存的岗位记录</span></div>
+<div class="metric"><small>进行中</small><strong id="mActive">0</strong><span>待投递 / 已投递 / 考试</span></div>
+<div class="metric"><small>面试阶段</small><strong id="mInterview">0</strong><span>等待或准备面试</span></div>
+<div class="metric"><small>Offer</small><strong id="mOffer">0</strong><span>已获得 Offer</span></div>
+<div class="metric"><small>已获反馈</small><strong id="mFeedback">0%</strong><span>面试 / Offer / 未通过占比</span></div>
+</section>
+<div class="toolbar">
+<div class="search"><input class="field" id="search" placeholder="搜索公司、岗位、备注…" aria-label="搜索投递记录"></div>
+<select id="filterStatus" aria-label="按状态筛选"><option value="all">全部状态</option><option>待投递</option><option>已投递</option><option>笔试 / 测评</option><option>面试中</option><option>Offer</option><option>未通过</option></select>
+<select id="filterPriority" aria-label="按优先级筛选"><option value="all">全部优先级</option><option>高</option><option>中</option><option>低</option></select>
+<span class="result-count" id="countLabel">显示 0 条</span>
+</div>
+<div class="layout">
+<section class="panel">
+<div class="panel-head"><h2>投递记录</h2><small>点击状态可直接更新流程</small></div>
+<div class="app-list" id="appList"></div>
+<div class="empty" id="emptyState" hidden><b>还没有匹配的记录</b>试试调整筛选条件，或新增一条岗位记录。</div>
+</section>
+<aside class="panel sidebar">
+<div class="side-section">
+<div class="panel-head"><h2>流程分布</h2><small>按当前记录统计</small></div>
+<div class="status-bars" id="statusBars"></div>
+</div>
+<div class="side-section">
+<div class="panel-head"><h2>工作流设计</h2><small>PRODUCT NOTES</small></div>
+<div class="tips">
+<div class="tip"><span class="tip-icon">01</span><div><b>集中记录</b><p>将分散在邮件、招聘平台和日历里的信息统一收纳。</p></div></div>
+<div class="tip"><span class="tip-icon">02</span><div><b>下一步行动</b><p>每条记录保留下一步任务，减少忘记跟进的情况。</p></div></div>
+<div class="tip"><span class="tip-icon">03</span><div><b>进度可视化</b><p>通过状态与汇总指标快速定位当前投递阶段。</p></div></div>
+</div>
+</div>
+<div class="side-section">
+<div class="panel-head"><h2>数据与隐私</h2></div>
+<p class="note">数据默认保存在当前浏览器的本地存储中，不会自动上传服务器。导出 CSV 可用于备份或在表格软件中继续整理。此概念原型尚未经过正式用户测试。</p>
+<div class="buttons" style="margin-top:10px"><button class="btn" id="clearData">清空本地记录</button><button class="btn" id="restoreDemo">恢复示例</button></div>
+</div>
+</aside>
+</div>
+<footer class="case-foot"><span>Yuki · Portfolio Project · 2026</span><span>HTML · CSS · JavaScript · localStorage · CSV Export</span><a href="./">返回主页 ↑</a></footer>
+</div>
+
+<div class="modal-backdrop" id="modalBackdrop" role="dialog" aria-modal="true" aria-labelledby="modalTitle">
+<div class="modal"><div class="modal-head"><h2 id="modalTitle">新增投递记录</h2><button class="xbtn" id="closeModal" aria-label="关闭">✕</button></div>
+<form id="appForm"><input type="hidden" id="editId">
+<div class="form-grid">
+<div class="form-item"><label for="company">公司名称 <span class="required">*</span></label><input class="field" id="company" maxlength="60" required placeholder="例如：星河科技"></div>
+<div class="form-item"><label for="role">岗位名称 <span class="required">*</span></label><input class="field" id="role" maxlength="80" required placeholder="例如：产品运营"></div>
+<div class="form-item"><label for="status">当前状态</label><select id="status"><option>待投递</option><option>已投递</option><option>笔试 / 测评</option><option>面试中</option><option>Offer</option><option>未通过</option></select></div>
+<div class="form-item"><label for="priority">优先级</label><select id="priority"><option>高</option><option selected>中</option><option>低</option></select></div>
+<div class="form-item"><label for="date">投递 / 计划日期</label><input type="date" class="field" id="date"></div>
+<div class="form-item"><label for="channel">来源渠道</label><input class="field" id="channel" maxlength="60" placeholder="例如：官网 / 招聘平台"></div>
+<div class="form-item full"><label for="nextAction">下一步行动</label><input class="field" id="nextAction" maxlength="160" placeholder="例如：周五前完成笔试复习"></div>
+<div class="form-item full"><label for="notes">备注 / 复盘</label><textarea id="notes" maxlength="600" placeholder="记录 JD 要点、准备重点、联系情况或面试复盘……"></textarea></div>
+</div>
+<div class="form-actions"><button class="btn" type="button" id="cancelModal">取消</button><button class="btn primary" type="submit">保存记录</button></div>
+</form></div></div>
+<script>
+(()=>{
+const statuses=['待投递','已投递','笔试 / 测评','面试中','Offer','未通过'];
+const key='yukiJobTracker_v1';
+const demo=[
+{id:'demo-1',company:'星河科技',role:'产品运营（示例）',status:'已投递',priority:'高',date:todayOffset(-2),channel:'公司官网',nextAction:'整理岗位相关案例',notes:'示例数据，可直接编辑或删除。'},
+{id:'demo-2',company:'云帆智能',role:'产品经理（示例）',status:'笔试 / 测评',priority:'高',date:todayOffset(-4),channel:'招聘平台',nextAction:'完成产品分析题练习',notes:'准备用户场景、需求拆解与指标设计。'},
+{id:'demo-3',company:'灵犀互动',role:'用户运营（示例）',status:'待投递',priority:'中',date:todayOffset(1),channel:'内推',nextAction:'根据 JD 定制简历',notes:'示例公司与岗位，仅用于展示工作流。'},
+{id:'demo-4',company:'极光软件',role:'产品助理（示例）',status:'面试中',priority:'高',date:todayOffset(-6),channel:'公司官网',nextAction:'准备项目介绍与复盘问题',notes:'记录面试轮次、核心问题与待跟进事项。'}
+];
+function todayOffset(n){const d=new Date();d.setDate(d.getDate()+n);return d.getFullYear()+'-'+String(d.getMonth()+1).padStart(2,'0')+'-'+String(d.getDate()).padStart(2,'0')}
+const $=id=>document.getElementById(id);
+let records=loadData();
+function loadData(){try{const saved=localStorage.getItem(key);if(saved){const parsed=JSON.parse(saved);if(Array.isArray(parsed))return parsed}}catch(e){}return JSON.parse(JSON.stringify(demo))}
+function save(){try{localStorage.setItem(key,JSON.stringify(records));return true}catch(e){alert('当前浏览器无法保存本地数据。请导出 CSV 进行备份。');return false}}
+function id(){return 'job-'+Date.now().toString(36)+'-'+Math.random().toString(36).slice(2,7)}
+function esc(s){return String(s??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]))}
+function statusClass(s){return ({'待投递':'st-pending','已投递':'st-applied','笔试 / 测评':'st-test','面试中':'st-interview','Offer':'st-offer','未通过':'st-rejected'})[s]||'st-pending'}
+function metrics(){
+ $('mTotal').textContent=records.length;
+ $('mActive').textContent=records.filter(r=>['待投递','已投递','笔试 / 测评'].includes(r.status)).length;
+ $('mInterview').textContent=records.filter(r=>r.status==='面试中').length;
+ $('mOffer').textContent=records.filter(r=>r.status==='Offer').length;
+ const feedback=records.filter(r=>['面试中','Offer','未通过'].includes(r.status)).length;
+ $('mFeedback').textContent=(records.length?Math.round(feedback/records.length*100):0)+'%';
+ const bars=$('statusBars');bars.innerHTML='';
+ statuses.forEach(st=>{const n=records.filter(r=>r.status===st).length;const row=document.createElement('div');row.className='status-row';row.innerHTML='<span>'+esc(st)+'</span><div class="bar"><div class="fill" style="width:'+(records.length?n/records.length*100:0)+'%"></div></div><strong>'+n+'</strong>';bars.appendChild(row)});
+}
+function filtered(){
+ const q=$('search').value.trim().toLowerCase(),st=$('filterStatus').value,pr=$('filterPriority').value;
+ return records.filter(r=>(st==='all'||r.status===st)&&(pr==='all'||r.priority===pr)&&(!q||[r.company,r.role,r.channel,r.nextAction,r.notes].join(' ').toLowerCase().includes(q))).slice().sort((a,b)=>(b.date||'').localeCompare(a.date||''));
+}
+function render(){
+ metrics();const list=$('appList');list.innerHTML='';const items=filtered();
+ $('countLabel').textContent='显示 '+items.length+' / '+records.length+' 条';$('emptyState').hidden=items.length>0;
+ items.forEach(r=>{
+ const card=document.createElement('article');card.className='app-card';
+ const statusOptions=statuses.map(s=>'<option '+(s===r.status?'selected':'')+'>'+esc(s)+'</option>').join('');
+ card.innerHTML='<div class="card-head"><div><div class="company">'+esc(r.company)+'</div><div class="role">'+esc(r.role)+'</div><div class="subline">'+esc(r.channel||'未填写渠道')+' · '+esc(r.date||'未设置日期')+'</div></div><span class="tag '+statusClass(r.status)+'">'+esc(r.status)+'</span></div>'+
+ '<div class="meta-grid"><div class="meta"><small>优先级</small><strong class="priority">'+esc(r.priority||'中')+'优先级</strong></div><div class="meta"><small>当前状态</small><select data-status="'+esc(r.id)+'" aria-label="更新状态 '+esc(r.company)+'" style="margin-top:3px;padding:6px 7px;font-size:10px">'+statusOptions+'</select></div></div>'+
+ '<div class="card-foot"><div class="next-action">→ '+esc(r.nextAction||'尚未填写下一步行动')+'</div><div class="mini-actions"><button class="mini-btn" data-edit="'+esc(r.id)+'">编辑</button><button class="mini-btn" data-delete="'+esc(r.id)+'">删除</button></div></div>'+
+ (r.notes?'<div class="subline" style="border-top:1px solid #ffffff0e;padding-top:9px;margin-top:10px">备注：'+esc(r.notes)+'</div>':'');
+ list.appendChild(card)
+ });
+}
+function openModal(rec){
+ $('appForm').reset();$('editId').value=rec?rec.id:'';$('modalTitle').textContent=rec?'编辑投递记录':'新增投递记录';
+ if(rec){['company','role','status','priority','date','channel','nextAction','notes'].forEach(k=>$(k).value=rec[k]||'')}
+ else{$('status').value='待投递';$('priority').value='中';$('date').value=todayOffset(0)}
+ $('modalBackdrop').classList.add('open');setTimeout(()=>$('company').focus(),40)
+}
+function closeModal(){$('modalBackdrop').classList.remove('open')}
+function exportCSV(){
+ const rows=[['公司','岗位','状态','优先级','日期','来源渠道','下一步行动','备注'],...records.map(r=>[r.company,r.role,r.status,r.priority,r.date,r.channel,r.nextAction,r.notes])];
+ const csv='\ufeff'+rows.map(row=>row.map(v=>'"'+String(v??'').replace(/"/g,'""')+'"').join(',')).join('\r\n');
+ const blob=new Blob([csv],{type:'text/csv;charset=utf-8;'}),url=URL.createObjectURL(blob),a=document.createElement('a');a.href=url;a.download='求职投递记录.csv';document.body.appendChild(a);a.click();a.remove();URL.revokeObjectURL(url)
+}
+$('addTop').addEventListener('click',()=>openModal(null));$('exportTop').addEventListener('click',exportCSV);$('search').addEventListener('input',render);$('filterStatus').addEventListener('change',render);$('filterPriority').addEventListener('change',render);
+$('closeModal').addEventListener('click',closeModal);$('cancelModal').addEventListener('click',closeModal);$('modalBackdrop').addEventListener('click',e=>{if(e.target===$('modalBackdrop'))closeModal()});window.addEventListener('keydown',e=>{if(e.key==='Escape')closeModal()});
+$('appForm').addEventListener('submit',e=>{e.preventDefault();const editId=$('editId').value;const obj={id:editId||id(),company:$('company').value.trim(),role:$('role').value.trim(),status:$('status').value,priority:$('priority').value,date:$('date').value,channel:$('channel').value.trim(),nextAction:$('nextAction').value.trim(),notes:$('notes').value.trim()};if(!obj.company||!obj.role)return;if(editId){const i=records.findIndex(r=>r.id===editId);if(i>=0)records[i]=obj}else records.unshift(obj);save();render();closeModal()});
+$('appList').addEventListener('change',e=>{const el=e.target.closest('[data-status]');if(!el)return;const rec=records.find(r=>r.id===el.dataset.status);if(rec){rec.status=el.value;save();render()}});
+$('appList').addEventListener('click',e=>{const edit=e.target.closest('[data-edit]'),del=e.target.closest('[data-delete]');if(edit){const rec=records.find(r=>r.id===edit.dataset.edit);if(rec)openModal(rec)}if(del){const rec=records.find(r=>r.id===del.dataset.delete);if(rec&&confirm('确定删除「'+rec.company - '」吗？'.replace('NaN',''))){records=records.filter(r=>r.id!==rec.id);save();render()}}});
+$('clearData').addEventListener('click',()=>{if(confirm('确定清空当前浏览器中的所有投递记录吗？清空前建议先导出 CSV。')){records=[];save();render()}});
+$('restoreDemo').addEventListener('click',()=>{if(confirm('用示例数据替换当前记录？建议先导出需要保留的数据。')){records=JSON.parse(JSON.stringify(demo));save();render()}});
+render();
+})();
+</script>
+</body>
+</html>
