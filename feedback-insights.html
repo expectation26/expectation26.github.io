@@ -1,224 +1,439 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="zh-CN">
 <head>
-<meta charset="utf-8">
-<meta name="viewport" content="width=device-width,initial-scale=1">
-<meta name="theme-color" content="#0b0d14">
-<meta name="description" content="产品反馈洞察工作台概念作品：反馈筛选、痛点分析、优先级矩阵和改进建议。">
-<title>产品反馈洞察工作台 · Yuki Portfolio</title>
-<style>
-:root{--bg:#0b0d14;--panel:#141a29;--line:rgba(255,255,255,.12);--text:#f5f6ff;--muted:#a5aec4;--blue:#8bb8ff;--purple:#c6a5ff;--mint:#8fe3d1;--amber:#f4ce8a;--red:#ff9eaf}
-*{box-sizing:border-box}html{scroll-behavior:smooth}body{margin:0;background:radial-gradient(ellipse at 82% 0%,#39316b40,transparent 40%),var(--bg);color:var(--text);font-family:Inter,-apple-system,BlinkMacSystemFont,"Segoe UI","PingFang SC","Microsoft YaHei",sans-serif;line-height:1.65}
-a{color:inherit;text-decoration:none}.wrap{width:min(1180px,calc(100% - 36px));margin:auto}.nav{display:flex;align-items:center;justify-content:space-between;padding:21px 0;border-bottom:1px solid var(--line);font-size:13px;color:var(--muted)}.brand{color:var(--text);font-weight:800;letter-spacing:1.8px}.brand span{color:var(--blue)}.nav a:hover{color:white}
-.hero{padding:38px 0 24px;display:flex;align-items:flex-end;justify-content:space-between;gap:24px}.eyebrow{font-size:10px;letter-spacing:2.5px;text-transform:uppercase;color:var(--blue)}h1{font-size:clamp(32px,5.1vw,55px);line-height:1.12;letter-spacing:-1.8px;margin:11px 0}.grad{background:linear-gradient(100deg,#8bb8ff,#d0aaff);color:transparent;background-clip:text;-webkit-background-clip:text}.lead{color:var(--muted);font-size:13px;max-width:760px;margin:0}.demo-badge{display:inline-flex;gap:7px;align-items:center;padding:6px 10px;border:1px solid #f4ce8a3b;background:#f4ce8a0c;color:#f2d7a5;border-radius:999px;font-size:10px;white-space:nowrap}.hero-actions{display:flex;align-items:center;gap:9px;flex-wrap:wrap}
-.btn{border:1px solid var(--line);background:#ffffff08;color:var(--text);border-radius:999px;padding:10px 15px;font-size:11px;font-weight:750;cursor:pointer;transition:transform .2s,border-color .2s}.btn:hover{transform:translateY(-1px);border-color:#a8b6ff77}.btn.primary{background:linear-gradient(100deg,#8bb8ff,#c6a5ff);color:#131624;border:0}
-.notice{margin:0 0 20px;padding:11px 14px;border-left:2px solid var(--amber);border-radius:0 10px 10px 0;background:#f4ce8a09;color:#c3cadb;font-size:11px}.notice strong{color:#f3d8a3}
-.metrics{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:11px;margin:15px 0 18px}.metric{padding:15px 16px;border:1px solid var(--line);border-radius:15px;background:linear-gradient(145deg,#171d2c,#10141f);min-width:0}.metric small{font-size:10px;color:var(--muted)}.metric strong{display:block;font-size:28px;letter-spacing:-.7px;line-height:1.45;font-variant-numeric:tabular-nums}.metric span{font-size:10px;color:#929cb6}
-.grid-main{display:grid;grid-template-columns:minmax(0,1.15fr) minmax(330px,.85fr);gap:13px;align-items:start}.panel{border:1px solid var(--line);border-radius:17px;background:linear-gradient(145deg,#171d2c,#10141f);padding:17px;min-width:0}.panel-head{display:flex;align-items:center;justify-content:space-between;gap:12px;margin-bottom:14px}.panel-head h2{font-size:15px;margin:0;letter-spacing:-.2px}.panel-head small{color:var(--muted);font-size:10px}.subtle{font-size:10px;color:var(--muted)}
-.toolbar{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:13px}.field,select,textarea{width:100%;color:var(--text);background:#0e1220;border:1px solid var(--line);border-radius:9px;padding:10px 11px;font:inherit;font-size:11px;outline:none}.field:focus,select:focus,textarea:focus{border-color:#91b5ff90}.toolbar .search{flex:1;min-width:170px}.toolbar select{width:auto;min-width:120px}.toolbar-bottom{display:flex;justify-content:space-between;gap:10px;align-items:center;margin:0 0 11px}.toolbar-bottom span{font-size:10px;color:var(--muted)}
-.feedback-list{display:grid;gap:9px}.feedback{border:1px solid #ffffff10;border-radius:12px;padding:12px;background:#ffffff03}.feedback:hover{border-color:#a3b2ff44}.feedback-top{display:flex;justify-content:space-between;gap:10px;align-items:flex-start}.feedback-title{font-size:12px;font-weight:750;color:#f1f3ff}.feedback-meta{font-size:10px;color:#8f9ab5;margin-top:5px}.feedback-text{font-size:11px;color:#c5cbe0;margin:10px 0 11px;line-height:1.8}.feedback-bottom{display:flex;justify-content:space-between;align-items:center;gap:8px;flex-wrap:wrap;border-top:1px solid #ffffff0c;padding-top:9px}.chips{display:flex;gap:5px;flex-wrap:wrap}.tag{display:inline-flex;align-items:center;border-radius:6px;padding:3px 7px;font-size:9px;border:1px solid transparent}.tag-neg{color:#ffb2c0;background:#ff9eaf10;border-color:#ff9eaf22}.tag-neu{color:#f0d4a0;background:#f4ce8a10;border-color:#f4ce8a22}.tag-pos{color:#93e5d2;background:#8fe3d110;border-color:#8fe3d122}.tag-topic{color:#c9b9ff;background:#c6a5ff10;border-color:#c6a5ff22}.tag-state{color:#b9d1ff;background:#8bb8ff10;border-color:#8bb8ff22}.small-select{width:auto;max-width:130px;padding:6px 7px;font-size:9px}.empty{padding:28px;text-align:center;color:var(--muted);font-size:11px}.empty strong{display:block;color:var(--text);font-size:13px;margin-bottom:4px}
-.side-stack{display:grid;gap:13px}.sentiment-layout{display:grid;grid-template-columns:130px minmax(0,1fr);align-items:center;gap:16px}.donut{width:122px;height:122px;border-radius:50%;position:relative;margin:auto;background:conic-gradient(var(--mint) 0 30%,var(--amber) 30% 52%,var(--red) 52% 100%)}.donut:after{content:"";position:absolute;inset:22px;border-radius:50%;background:#151a29;border:1px solid #ffffff0b}.donut-center{position:absolute;z-index:1;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center}.donut-center strong{font-size:25px;line-height:1}.donut-center span{font-size:9px;color:var(--muted);margin-top:5px}.legend{display:grid;gap:10px}.legend-row{display:flex;align-items:center;justify-content:space-between;gap:12px;font-size:10px;color:var(--muted)}.legend-name{display:flex;align-items:center;gap:7px}.dot{width:7px;height:7px;border-radius:3px;display:inline-block}.legend-row strong{color:var(--text);font-size:11px}
-.ranked-list{display:grid;gap:12px}.rank-row{display:grid;grid-template-columns:minmax(94px,.9fr) minmax(75px,1.4fr) auto;align-items:center;gap:9px}.rank-label{font-size:10px;color:#d5dbef;min-width:0}.rank-sub{display:block;color:#8792ac;font-size:9px}.bar{height:7px;border-radius:99px;background:#ffffff0e;overflow:hidden}.bar-fill{height:100%;border-radius:99px;background:linear-gradient(90deg,#8bb8ff,#c6a5ff);width:0;transition:width .25s}.rank-score{font-size:10px;color:#d8caff;font-weight:800;text-align:right;white-space:nowrap}.link-button{border:0;background:none;padding:0;color:var(--blue);font-size:10px;cursor:pointer}
-.matrix{position:relative;height:235px;border:1px solid #ffffff12;border-radius:11px;overflow:hidden;background-image:linear-gradient(#ffffff0c 1px,transparent 1px),linear-gradient(90deg,#ffffff0c 1px,transparent 1px);background-size:25% 25%;background-color:#0d1220}.matrix:before{content:"";position:absolute;left:50%;top:0;bottom:0;border-left:1px dashed #ffffff20}.matrix:after{content:"";position:absolute;left:0;right:0;top:50%;border-top:1px dashed #ffffff20}.matrix-label{position:absolute;font-size:8px;color:#7f8aa6;z-index:1;pointer-events:none}.ml-tl{top:7px;left:8px}.ml-tr{top:7px;right:8px}.ml-bl{bottom:7px;left:8px}.ml-br{bottom:7px;right:8px}.axis-y{position:absolute;left:5px;top:43%;font-size:8px;color:#8f9ab5;transform:rotate(-90deg);transform-origin:left center}.axis-x{position:absolute;right:8px;bottom:28px;font-size:8px;color:#8f9ab5}.matrix-point{position:absolute;z-index:2;transform:translate(-50%,-50%);border:1px solid #e4dcff99;color:#141527;background:#c7aaff;border-radius:99px;min-width:25px;height:25px;padding:0 5px;font-size:8px;font-weight:850;cursor:pointer;box-shadow:0 0 0 4px #c7aaff15;transition:transform .2s}.matrix-point:hover,.matrix-point.active{transform:translate(-50%,-50%) scale(1.16);background:#f3d7ff;box-shadow:0 0 0 6px #c7aaff20}.matrix-legend{display:flex;justify-content:space-between;gap:8px;flex-wrap:wrap;color:var(--muted);font-size:9px;margin-top:9px}
-.insight-callout{border:1px solid #c6a5ff2b;background:linear-gradient(140deg,#c6a5ff0d,#8bb8ff06);border-radius:12px;padding:13px}.insight-kicker{font-size:9px;letter-spacing:1.5px;color:var(--purple)}.insight-callout h3{font-size:14px;margin:5px 0 6px}.insight-callout p{font-size:10px;color:#b3bdd5;margin:0;line-height:1.8}.rec-actions{display:flex;gap:8px;flex-wrap:wrap;margin-top:11px}.priority-pill{display:inline-flex;padding:3px 7px;border:1px solid #f4ce8a30;background:#f4ce8a0d;border-radius:6px;color:#f4d7a2;font-size:9px}
-.recommendations{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:11px;margin-top:13px}.rec-card{border:1px solid var(--line);border-radius:13px;padding:14px;background:#ffffff03}.rec-card small{font-size:9px;color:var(--blue);letter-spacing:1px}.rec-card h3{font-size:13px;margin:6px 0}.rec-card p{font-size:10px;color:var(--muted);line-height:1.8;margin:0}.rec-card .metric-note{border-top:1px solid #ffffff10;padding-top:9px;margin-top:11px;color:#d9def0}
-.section-title{display:flex;justify-content:space-between;align-items:end;gap:12px;margin:25px 0 12px}.section-title h2{font-size:19px;margin:0}.section-title p{font-size:10px;color:var(--muted);margin:0}
-.case-method{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:11px}.method-step{border-top:1px solid #9ebaff55;padding-top:12px}.method-step small{font-size:9px;letter-spacing:1px;color:var(--blue)}.method-step h3{font-size:12px;margin:6px 0}.method-step p{font-size:10px;color:var(--muted);margin:0}
-.modal-backdrop{position:fixed;inset:0;z-index:10;display:none;align-items:center;justify-content:center;padding:16px;background:#05070dc9;backdrop-filter:blur(9px)}.modal-backdrop.open{display:flex}.modal{width:min(620px,100%);max-height:min(90vh,850px);overflow:auto;border:1px solid var(--line);border-radius:18px;background:#151a29;padding:21px;box-shadow:0 30px 90px #0009}.modal-head{display:flex;justify-content:space-between;align-items:center;margin-bottom:16px}.modal-head h2{font-size:17px;margin:0}.xbtn{border:1px solid var(--line);background:none;color:var(--muted);border-radius:8px;padding:5px 9px;cursor:pointer}.form-grid{display:grid;grid-template-columns:1fr 1fr;gap:11px}.form-item{min-width:0}.form-item.full{grid-column:1/-1}.form-item label{display:block;font-size:10px;color:#b5bfd5;margin:0 0 5px}.form-item textarea{min-height:90px;resize:vertical}.form-actions{display:flex;justify-content:flex-end;gap:8px;margin-top:14px}
-.footer{display:flex;justify-content:space-between;gap:12px;border-top:1px solid var(--line);padding:21px 0 32px;margin-top:26px;color:var(--muted);font-size:10px}
-@media(max-width:900px){.grid-main{grid-template-columns:1fr}.side-stack{grid-template-columns:1fr 1fr}.side-stack .panel:last-child{grid-column:1/-1}.hero{align-items:flex-start;flex-direction:column}.metrics{grid-template-columns:repeat(3,minmax(0,1fr))}.recommendations{grid-template-columns:1fr 1fr}}
-@media(max-width:600px){.wrap{width:calc(100% - 24px)}.nav{padding:16px 0}.metrics{grid-template-columns:repeat(2,minmax(0,1fr));gap:8px}.metric{padding:12px}.metric strong{font-size:24px}.metric:last-child{grid-column:1/-1}.side-stack{grid-template-columns:1fr}.side-stack .panel:last-child{grid-column:auto}.panel{padding:13px}.sentiment-layout{grid-template-columns:105px minmax(0,1fr);gap:12px}.donut{width:100px;height:100px}.donut:after{inset:18px}.donut-center strong{font-size:21px}.toolbar select{flex:1;min-width:0}.recommendations{grid-template-columns:1fr}.case-method{grid-template-columns:1fr 1fr}.section-title{align-items:flex-start;flex-direction:column}.form-grid{grid-template-columns:1fr}.form-item.full{grid-column:auto}.footer{align-items:flex-start;flex-direction:column}.rank-row{grid-template-columns:minmax(78px,.9fr) minmax(52px,1.4fr) auto}}
-@media(prefers-reduced-motion:reduce){html{scroll-behavior:auto}*,*::before,*::after{transition:none!important}}
-</style>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#0b0d14">
+  <meta name="description" content="产品反馈洞察工作台 — 从反馈收集、分类筛选到优先级与行动规划的完整分析流程（演示数据）。">
+  <title>产品反馈洞察工作台 · Yuki</title>
+  <style>
+    :root {
+      --bg: #0b0d14;
+      --panel: #131722;
+      --white: #f6f7fb;
+      --muted: #a1a8bb;
+      --blue: #7aa7ff;
+      --purple: #c1a5ff;
+      --green: #6fe0a8;
+      --amber: #ffce6b;
+      --red: #ff8a8a;
+      --line: rgba(255,255,255,.12);
+      --max: 1120px;
+    }
+    * { box-sizing: border-box; }
+    html { scroll-behavior: smooth; }
+    body {
+      margin: 0; color: var(--white);
+      background: radial-gradient(ellipse at 75% 0%, rgba(87,111,255,.13), transparent 32%), var(--bg);
+      font-family: Inter, -apple-system, BlinkMacSystemFont, "Segoe UI", "PingFang SC", "Microsoft YaHei", sans-serif;
+      line-height: 1.7;
+    }
+    a { color: inherit; text-decoration: none; }
+    .wrap { width: min(var(--max), calc(100% - 48px)); margin-inline: auto; }
+    .back { display: inline-flex; align-items: center; gap: 8px; color: var(--muted); font-size: 13px; margin: 26px 0 4px; transition: color .2s; }
+    .back:hover { color: var(--white); }
+
+    .hero { padding: 18px 0 30px; }
+    .kicker { color: var(--blue); text-transform: uppercase; letter-spacing: 2.8px; font-size: 11px; font-weight: 700; }
+    h1 { margin: 14px 0 10px; font-size: clamp(34px, 5vw, 56px); letter-spacing: -.04em; line-height: 1.1; }
+    .lede { max-width: 720px; color: var(--muted); font-size: 15px; }
+    .badge { display: inline-flex; align-items: center; gap: 7px; margin-top: 14px; padding: 5px 12px; border: 1px solid rgba(255,206,107,.4); background: rgba(255,206,107,.08); color: var(--amber); border-radius: 999px; font-size: 11px; letter-spacing: .5px; }
+    .badge::before { content: ""; width: 7px; height: 7px; border-radius: 50%; background: var(--amber); box-shadow: 0 0 10px var(--amber); }
+
+    section { padding: 30px 0; }
+    .section-head { display: flex; justify-content: space-between; align-items: end; gap: 18px; margin-bottom: 18px; flex-wrap: wrap; }
+    .section-index { color: var(--blue); font-size: 11px; text-transform: uppercase; letter-spacing: 2.5px; }
+    h2 { margin: 6px 0 0; font-size: clamp(22px, 3vw, 30px); letter-spacing: -.03em; }
+    .section-note { color: var(--muted); font-size: 12px; margin: 0; }
+
+    .card { padding: 22px; border: 1px solid var(--line); border-radius: 17px; background: linear-gradient(145deg, rgba(27,32,47,.92), rgba(16,18,28,.92)); }
+
+    /* KPI */
+    .kpi-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 14px; }
+    .kpi { padding: 18px 20px; }
+    .kpi .label { color: var(--muted); font-size: 12px; }
+    .kpi .value { font-size: 32px; font-weight: 750; letter-spacing: -.03em; margin: 8px 0 2px; }
+    .kpi .delta { font-size: 12px; font-weight: 600; }
+    .delta.down { color: var(--green); }
+    .delta.up { color: var(--red); }
+    .delta.good-up { color: var(--green); }
+
+    /* two col */
+    .two-col { display: grid; grid-template-columns: .85fr 1.15fr; gap: 16px; }
+    .donut-wrap { display: flex; gap: 20px; align-items: center; flex-wrap: wrap; }
+    .donut { width: 160px; height: 160px; flex: 0 0 auto; }
+    .legend { display: flex; flex-direction: column; gap: 10px; font-size: 13px; }
+    .legend .row { display: flex; align-items: center; gap: 9px; }
+    .dot { width: 10px; height: 10px; border-radius: 3px; flex: 0 0 auto; }
+    .legend .num { margin-left: auto; color: var(--muted); }
+
+    /* pain points bars */
+    .bar-row { display: grid; grid-template-columns: 1fr auto; gap: 8px 14px; align-items: center; margin-bottom: 14px; }
+    .bar-row:last-child { margin-bottom: 0; }
+    .bar-name { font-size: 13px; }
+    .bar-count { font-size: 12px; color: var(--muted); font-variant-numeric: tabular-nums; }
+    .bar-track { grid-column: 1 / -1; height: 9px; border-radius: 999px; background: rgba(255,255,255,.07); overflow: hidden; }
+    .bar-fill { height: 100%; border-radius: 999px; background: linear-gradient(90deg, var(--blue), var(--purple)); }
+
+    /* filters + samples */
+    .filters { display: flex; flex-wrap: wrap; gap: 9px; margin-bottom: 16px; }
+    .fbtn { padding: 7px 14px; border: 1px solid var(--line); border-radius: 999px; background: rgba(255,255,255,.03); color: var(--muted); font-size: 12px; cursor: pointer; transition: all .18s; }
+    .fbtn:hover { border-color: #8497cb; color: var(--white); }
+    .fbtn.active { background: var(--white); color: #0b0d14; border-color: var(--white); font-weight: 700; }
+    .sample-list { display: flex; flex-direction: column; gap: 10px; }
+    .sample { display: flex; gap: 12px; align-items: flex-start; padding: 13px 15px; border: 1px solid var(--line); border-radius: 13px; background: rgba(255,255,255,.025); transition: opacity .2s, transform .2s; }
+    .sample.hide { display: none; }
+    .tag { flex: 0 0 auto; font-size: 11px; padding: 3px 9px; border-radius: 7px; font-weight: 700; }
+    .tag.neg { color: var(--red); background: rgba(255,138,138,.12); }
+    .tag.neu { color: var(--amber); background: rgba(255,206,107,.12); }
+    .tag.pos { color: var(--green); background: rgba(111,224,168,.12); }
+    .sample .body { font-size: 13px; }
+    .sample .cat { color: var(--muted); font-size: 11px; margin-top: 3px; }
+    .count-line { color: var(--muted); font-size: 12px; margin: 4px 0 14px; }
+
+    /* priority matrix */
+    .matrix { display: grid; grid-template-columns: 90px 1fr 1fr; grid-template-rows: 28px 1fr 1fr; gap: 8px; min-height: 340px; }
+    .axis { display: flex; align-items: center; justify-content: center; font-size: 11px; color: var(--muted); letter-spacing: 1px; }
+    .axis.y { writing-mode: vertical-rl; transform: rotate(180deg); }
+    .quad { border: 1px dashed var(--line); border-radius: 14px; padding: 14px; position: relative; }
+    .quad .qtitle { font-size: 12px; font-weight: 700; margin-bottom: 10px; }
+    .quad .qi { font-size: 12px; color: var(--muted); padding: 6px 9px; border-radius: 9px; background: rgba(255,255,255,.04); margin-bottom: 7px; border-left: 3px solid var(--blue); }
+    .quad.do { background: rgba(111,224,168,.06); border-color: rgba(111,224,168,.35); }
+    .quad.do .qtitle { color: var(--green); }
+    .quad.do .qi { border-left-color: var(--green); }
+    .quad.plan { background: rgba(255,206,107,.05); border-color: rgba(255,206,107,.3); }
+    .quad.plan .qtitle { color: var(--amber); }
+    .quad.plan .qi { border-left-color: var(--amber); }
+    .quad.watch { background: rgba(122,167,255,.05); }
+    .quad.watch .qtitle { color: var(--blue); }
+    .quad.hold { background: rgba(255,138,138,.05); border-color: rgba(255,138,138,.25); }
+    .quad.hold .qtitle { color: var(--red); }
+    .quad.hold .qi { border-left-color: var(--red); }
+
+    /* kanban */
+    .kanban { display: grid; grid-template-columns: repeat(4, 1fr); gap: 12px; }
+    .col { border: 1px solid var(--line); border-radius: 14px; padding: 14px; background: rgba(255,255,255,.02); }
+    .col h3 { margin: 0 0 4px; font-size: 13px; display: flex; align-items: center; gap: 8px; }
+    .col .n { font-size: 11px; color: var(--muted); }
+    .pill { width: 9px; height: 9px; border-radius: 50%; }
+    .pill.todo { background: var(--muted); }
+    .pill.doing { background: var(--blue); }
+    .pill.done { background: var(--green); }
+    .pill.plan { background: var(--purple); }
+    .kitem { font-size: 12px; padding: 9px 11px; margin-top: 9px; border-radius: 10px; background: rgba(255,255,255,.035); border: 1px solid var(--line); }
+    .kitem .meta { color: var(--muted); font-size: 10px; margin-top: 4px; }
+
+    /* suggestions */
+    .sug-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 14px; }
+    .sug .horizon { font-size: 11px; letter-spacing: 1.5px; text-transform: uppercase; color: var(--purple); }
+    .sug h3 { margin: 8px 0 12px; font-size: 17px; }
+    .sug ul { margin: 0; padding-left: 18px; color: var(--muted); font-size: 13px; }
+    .sug li { margin-bottom: 9px; }
+
+    .method { font-size: 12px; color: var(--muted); border-top: 1px solid var(--line); margin-top: 26px; padding-top: 18px; }
+    .method code { background: rgba(255,255,255,.06); padding: 1px 6px; border-radius: 5px; font-size: 11px; }
+
+    footer { padding: 22px 0 40px; color: var(--muted); font-size: 11px; border-top: 1px solid var(--line); margin-top: 30px; }
+
+    @media (max-width: 860px) {
+      .kpi-grid { grid-template-columns: repeat(2, 1fr); }
+      .two-col { grid-template-columns: 1fr; }
+      .kanban { grid-template-columns: repeat(2, 1fr); }
+      .sug-grid { grid-template-columns: 1fr; }
+      .matrix { grid-template-columns: 70px 1fr 1fr; }
+    }
+    @media (max-width: 520px) {
+      .wrap { width: calc(100% - 32px); }
+      .kpi-grid, .kanban { grid-template-columns: 1fr; }
+    }
+    @media (prefers-reduced-motion: reduce) { * { animation: none !important; transition: none !important; } }
+  </style>
 </head>
 <body>
-<div class="wrap">
-<nav class="nav"><a class="brand" href="./">YUKI<span>.</span></a><a href="./">← 返回个人主页</a></nav>
-<header class="hero">
-<div><div class="eyebrow">PROJECT 04 · PRODUCT INSIGHTS</div><h1>从用户反馈里，<br><span class="grad">找到值得解决的问题。</span></h1><p class="lead">产品反馈洞察工作台 · 将零散反馈整理为可筛选的数据、清晰的痛点优先级和可执行的产品改进建议。页面内置演示数据，支持新增反馈、状态跟进与 CSV 导出。</p></div>
-<div class="hero-actions"><span class="demo-badge">● DEMO DATA · 模拟数据</span><button class="btn primary" id="addFeedback">＋ 新增反馈</button><button class="btn" id="exportCsv">导出 CSV ↗</button></div>
-</header>
-<div class="notice"><strong>数据说明：</strong>页面内的用户反馈均为虚构示例，用于演示产品分析方法，不代表真实用户调研或任何真实产品的评价。新增或修改的数据保存在当前浏览器本地，可随时导出。</div>
-<section class="metrics" aria-label="反馈概览">
-<div class="metric"><small>反馈总数</small><strong id="mTotal">0</strong><span>当前数据集中的记录</span></div>
-<div class="metric"><small>负向反馈</small><strong id="mNegative">0</strong><span>建议优先排查的问题</span></div>
-<div class="metric"><small>高影响痛点</small><strong id="mHigh">0</strong><span>影响等级 ≥ 4 / 5</span></div>
-<div class="metric"><small>体验均分</small><strong id="mRating">0.0</strong><span>示例评分 · 满分 5</span></div>
-<div class="metric"><small>已纳入规划</small><strong id="mPlanned">0</strong><span>进入产品改进流程</span></div>
-</section>
-<div class="grid-main">
-<section class="panel">
-<div class="panel-head"><h2>01 / 用户反馈池</h2><small>检索 · 筛选 · 状态跟进</small></div>
-<div class="toolbar">
-<div class="search"><input class="field" id="search" placeholder="搜索反馈内容、分类、来源…" aria-label="搜索反馈"></div>
-<select id="categoryFilter" aria-label="反馈分类"><option value="all">全部分类</option></select>
-<select id="sentimentFilter" aria-label="情绪筛选"><option value="all">全部情绪</option><option value="负向">负向</option><option value="中性">中性</option><option value="正向">正向</option></select>
-<select id="statusFilter" aria-label="状态筛选"><option value="all">全部状态</option><option>待分析</option><option>纳入规划</option><option>已解决</option></select>
-</div>
-<div class="toolbar-bottom"><span id="shownCount">显示 0 条反馈</span><button class="link-button" id="clearFilters">清空筛选</button></div>
-<div class="feedback-list" id="feedbackList"></div>
-<div class="empty" id="emptyState" hidden><strong>没有找到匹配的反馈</strong>调整筛选条件或新增一条反馈。</div>
-</section>
-<aside class="side-stack">
-<section class="panel">
-<div class="panel-head"><h2>02 / 情绪分布</h2><small>整体反馈结构</small></div>
-<div class="sentiment-layout">
-<div class="donut" id="donut"><div class="donut-center"><strong id="donutTotal">0</strong><span>条反馈</span></div></div>
-<div class="legend" id="sentimentLegend"></div>
-</div>
-</section>
-<section class="panel">
-<div class="panel-head"><h2>03 / 高频痛点排行</h2><small>按综合优先级排序</small></div>
-<div class="ranked-list" id="ranking"></div>
-</section>
-<section class="panel">
-<div class="panel-head"><h2>04 / 优先级矩阵</h2><small>点击节点查看分析</small></div>
-<div class="matrix" id="matrix">
-<span class="matrix-label ml-tl">低频 · 高影响</span><span class="matrix-label ml-tr">高频 · 高影响</span><span class="matrix-label ml-bl">低频 · 低影响</span><span class="matrix-label ml-br">高频 · 低影响</span><span class="axis-y">影响等级 ↑</span><span class="axis-x">反馈频次 →</span>
-</div>
-<div class="matrix-legend"><span>● 节点大小代表反馈量</span><span>选择节点定位问题</span></div>
-<div class="insight-callout" id="selectedInsight" style="margin-top:12px"><div class="insight-kicker">SELECTED ISSUE</div><h3>优先问题洞察</h3><p>选择一个痛点节点查看简要分析。</p></div>
-</section>
-</aside>
-</div>
-<div class="section-title"><h2>05 / 产品改进建议</h2><p>由模拟反馈主题映射得到，可编辑、可导出复用</p></div>
-<section class="recommendations" id="recommendations"></section>
-<div class="section-title"><h2>06 / 分析方法</h2><p>从信息整理到行动闭环</p></div>
-<section class="panel"><div class="case-method">
-<div class="method-step"><small>STEP 01</small><h3>收集与清洗</h3><p>统一反馈字段，保留来源与原始表达，避免过早丢失上下文。</p></div>
-<div class="method-step"><small>STEP 02</small><h3>分类与识别</h3><p>按体验主题和情绪归类，区分个别意见与重复出现的模式。</p></div>
-<div class="method-step"><small>STEP 03</small><h3>建立优先级</h3><p>结合出现频次、负向占比与影响等级，帮助团队讨论先后顺序。</p></div>
-<div class="method-step"><small>STEP 04</small><h3>定义行动与验证</h3><p>给每个重要问题指定改进方向，并通过后续数据或测试验证效果。</p></div>
-</div></section>
-<footer class="footer"><span>Yuki · Portfolio Project · 2026</span><span>Vanilla HTML / CSS / JavaScript · localStorage · CSV Export</span><a href="./">返回个人主页 ↑</a></footer>
-</div>
-<div class="modal-backdrop" id="modalBackdrop" role="dialog" aria-modal="true" aria-labelledby="modalTitle">
-<div class="modal"><div class="modal-head"><h2 id="modalTitle">新增模拟反馈</h2><button class="xbtn" id="closeModal" aria-label="关闭">✕</button></div>
-<form id="feedbackForm"><input type="hidden" id="editId">
-<div class="form-grid">
-<div class="form-item"><label for="fTitle">反馈标题</label><input id="fTitle" class="field" maxlength="100" required placeholder="用一句话概括问题"></div>
-<div class="form-item"><label for="fCategory">问题分类</label><select id="fCategory"></select></div>
-<div class="form-item"><label for="fSentiment">情绪倾向</label><select id="fSentiment"><option>负向</option><option>中性</option><option>正向</option></select></div>
-<div class="form-item"><label for="fRating">体验评分（1–5）</label><select id="fRating"><option value="1">1 · 很不满意</option><option value="2" selected>2 · 不满意</option><option value="3">3 · 一般</option><option value="4">4 · 满意</option><option value="5">5 · 很满意</option></select></div>
-<div class="form-item"><label for="fImpact">影响等级（1–5）</label><select id="fImpact"><option value="1">1 · 很低</option><option value="2">2 · 较低</option><option value="3" selected>3 · 中等</option><option value="4">4 · 较高</option><option value="5">5 · 很高</option></select></div>
-<div class="form-item"><label for="fSource">反馈来源</label><select id="fSource"><option>应用内反馈</option><option>客服会话</option><option>体验测试</option><option>社群留言</option><option>示例记录</option></select></div>
-<div class="form-item full"><label for="fText">反馈内容</label><textarea id="fText" maxlength="600" required placeholder="保留用户原始表达或记录观察到的现象……"></textarea></div>
-</div><div class="form-actions"><button class="btn" type="button" id="cancelModal">取消</button><button class="btn primary" type="submit">保存反馈</button></div>
-</form></div></div>
-<script>
-(function(){
-const categories=['输出质量','结果可信度','上下文记忆','效率性能','导出分享','移动端体验'];
-const topicInfo={
-'输出质量':{impact:4,action:'提供可选择的输出结构模板',why:'多条反馈集中在格式和内容结构不稳定，适合先提供明确的输出模板与一键重生成选项。',metric:'模板使用率、二次编辑率、任务完成率'},
-'结果可信度':{impact:5,action:'增加依据展示与不确定性提示',why:'用户难以判断结论依据，可能影响对核心结果的信任；应优先补充来源说明、引用入口和不确定性提示。',metric:'结果核验率、纠错率、信任评分'},
-'上下文记忆':{impact:4,action:'强化对话上下文摘要与确认机制',why:'长对话中的目标或约束丢失会造成重复输入和结果偏差；可在关键节点摘要已知条件并允许用户修正。',metric:'重复输入率、追问轮次、任务中断率'},
-'效率性能':{impact:4,action:'展示生成进度并优化等待反馈',why:'等待时间不透明会放大用户的不确定感；可先增加进度提示、可取消操作与分段呈现。',metric:'等待中退出率、任务完成率、感知速度评分'},
-'导出分享':{impact:3,action:'让导出入口更可见并支持常用格式',why:'用户完成内容后需要复制、下载或继续编辑；应缩短后续动作路径，并测试入口命名和位置。',metric:'导出成功率、完成后离开率、二次使用率'},
-'移动端体验':{impact:3,action:'优先修复窄屏排版与触控问题',why:'移动端布局和点击区域影响核心任务连续性；应先修复遮挡、横向溢出与难以点击的控件。',metric:'移动端任务完成率、误触率、页面退出率'}
-};
-const seed=[
-{id:'F-101',date:'2026-10-03',title:'输出经常不是我想要的格式',text:'想要表格时会生成一大段文字，反复补充要求也不一定稳定。',category:'输出质量',sentiment:'负向',rating:2,impact:4,source:'应用内反馈',status:'待分析'},
-{id:'F-102',date:'2026-10-03',title:'长内容结构需要反复调整',text:'生成报告的标题层级不太一致，整理成能直接使用的内容要花不少时间。',category:'输出质量',sentiment:'负向',rating:2,impact:4,source:'体验测试',status:'待分析'},
-{id:'F-103',date:'2026-10-04',title:'希望有几种固定的写作模板',text:'如果能先选汇报、邮件或方案模板，再填需求，会更容易上手。',category:'输出质量',sentiment:'中性',rating:3,impact:3,source:'社群留言',status:'待分析'},
-{id:'F-104',date:'2026-10-05',title:'复制到文档后格式有变化',text:'复制之后列表缩进和标题格式会变化，还需要手动重新排版。',category:'输出质量',sentiment:'负向',rating:2,impact:3,source:'客服会话',status:'纳入规划'},
-{id:'F-105',date:'2026-10-05',title:'答案没有告诉我依据是什么',text:'结果看起来很完整，但我不知道哪些信息有来源、哪些只是推断。',category:'结果可信度',sentiment:'负向',rating:1,impact:5,source:'应用内反馈',status:'待分析'},
-{id:'F-106',date:'2026-10-06',title:'希望可以直接查看引用来源',text:'尤其在需要做判断时，希望能看到参考出处或至少知道应该再核实什么。',category:'结果可信度',sentiment:'负向',rating:2,impact:5,source:'体验测试',status:'待分析'},
-{id:'F-107',date:'2026-10-06',title:'部分答案很有帮助，但事实还要核验',text:'内容整理效率不错，不过关键数字最好能标注是否经过核实。',category:'结果可信度',sentiment:'中性',rating:3,impact:4,source:'社群留言',status:'纳入规划'},
-{id:'F-108',date:'2026-10-07',title:'对话很长之后会忘记前面限制',text:'前面说明了字数和受众，继续追问几轮后结果又偏离原来的要求。',category:'上下文记忆',sentiment:'负向',rating:2,impact:4,source:'客服会话',status:'待分析'},
-{id:'F-109',date:'2026-10-07',title:'修改需求时不确定哪些条件还生效',text:'我想只改语气但保留结构，有时需要重新描述全部要求。',category:'上下文记忆',sentiment:'负向',rating:2,impact:4,source:'应用内反馈',status:'待分析'},
-{id:'F-110',date:'2026-10-08',title:'如果能自动总结当前目标会更好',text:'多轮修改结束后，希望有一块区域显示当前目标和已确认的约束。',category:'上下文记忆',sentiment:'正向',rating:4,impact:3,source:'体验测试',status:'已解决'},
-{id:'F-111',date:'2026-10-08',title:'生成时等待时间不太确定',text:'有时要等一会儿，但不知道还需要多久，也不知道是不是卡住了。',category:'效率性能',sentiment:'负向',rating:2,impact:4,source:'应用内反馈',status:'待分析'},
-{id:'F-112',date:'2026-10-09',title:'复杂任务最好能分步骤呈现',text:'一次生成很多内容时不太好跟进，如果先展示步骤和进度会安心一点。',category:'效率性能',sentiment:'中性',rating:3,impact:3,source:'体验测试',status:'待分析'},
-{id:'F-113',date:'2026-10-09',title:'短问题响应很快',text:'简单任务基本能马上给出结果，用来梳理思路很方便。',category:'效率性能',sentiment:'正向',rating:5,impact:2,source:'社群留言',status:'已解决'},
-{id:'F-114',date:'2026-10-10',title:'完成后没找到下载在哪里',text:'内容生成之后我花了一会儿才找到导出，按钮位置不够明显。',category:'导出分享',sentiment:'负向',rating:2,impact:3,source:'应用内反馈',status:'待分析'},
-{id:'F-115',date:'2026-10-10',title:'希望导出时保留格式',text:'复制分享比较方便，但下载成文件时希望可以保留标题和列表格式。',category:'导出分享',sentiment:'中性',rating:3,impact:3,source:'客服会话',status:'待分析'},
-{id:'F-116',date:'2026-10-11',title:'手机上有些按钮挤在一起',text:'窄屏上按钮和文字距离很近，偶尔会点错，希望点击区域大一些。',category:'移动端体验',sentiment:'负向',rating:2,impact:3,source:'体验测试',status:'待分析'},
-{id:'F-117',date:'2026-10-11',title:'长答案在手机上阅读有点累',text:'希望标题可以折叠，段落更清楚，方便通勤时阅读。',category:'移动端体验',sentiment:'中性',rating:3,impact:2,source:'应用内反馈',status:'待分析'},
-{id:'F-118',date:'2026-10-12',title:'快速生成提纲很方便',text:'从一个模糊想法快速得到可编辑的大纲很有帮助，减少了启动成本。',category:'输出质量',sentiment:'正向',rating:5,impact:2,source:'社群留言',status:'已解决'},
-{id:'F-119',date:'2026-10-12',title:'结果可以更明确地区分事实与建议',text:'希望系统把已知信息、推断和建议分开，降低误读风险。',category:'结果可信度',sentiment:'负向',rating:2,impact:5,source:'体验测试',status:'待分析'},
-{id:'F-120',date:'2026-10-12',title:'导出后还想继续在线修改',text:'希望导出按钮旁边可以提供复制、下载以及继续编辑的选择。',category:'导出分享',sentiment:'正向',rating:4,impact:2,source:'应用内反馈',status:'纳入规划'}
-];
-const STORAGE_KEY='yuki-feedback-insights-v1';
-const $=id=>document.getElementById(id);
-let feedback=load();
-let selectedCategory='all';
-function load(){try{const raw=localStorage.getItem(STORAGE_KEY);if(raw){const x=JSON.parse(raw);if(Array.isArray(x))return x}}catch(e){}return JSON.parse(JSON.stringify(seed))}
-function persist(){try{localStorage.setItem(STORAGE_KEY,JSON.stringify(feedback))}catch(e){alert('当前浏览器无法保存本地修改，请导出 CSV 备份。')}}
-function esc(v){return String(v==null?'':v).replace(/[&<>"']/g,function(c){return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]})}
-function mean(arr,key){return arr.length?arr.reduce((a,b)=>a+Number(b[key]||0),0)/arr.length:0}
-function counts(){const total=feedback.length;const negative=feedback.filter(f=>f.sentiment==='负向').length;const high=feedback.filter(f=>Number(f.impact)>=4).length;const rating=mean(feedback,'rating');const planned=feedback.filter(f=>f.status==='纳入规划').length;$('mTotal').textContent=total;$('mNegative').textContent=negative;$('mHigh').textContent=high;$('mRating').textContent=rating.toFixed(1);$('mPlanned').textContent=planned;$('donutTotal').textContent=total}
-function sentiments(){const ns=['正向','中性','负向'];const colors={'正向':'var(--mint)','中性':'var(--amber)','负向':'var(--red)'};const n={};ns.forEach(s=>n[s]=feedback.filter(f=>f.sentiment===s).length);let start=0;const segments=ns.map(s=>{const from=start;start+=feedback.length?n[s]/feedback.length*100:0;return colors[s]+' '+from+'% '+start+'%'});$('donut').style.background='conic-gradient('+segments.join(',')+')';const legend=$('sentimentLegend');legend.innerHTML='';ns.forEach(s=>{const row=document.createElement('div');row.className='legend-row';row.innerHTML='<span class="legend-name"><i class="dot" style="background:'+colors[s]+'"></i>'+s+'</span><strong>'+n[s]+' · '+(feedback.length?Math.round(n[s]/feedback.length*100):0)+'%</strong>';legend.appendChild(row)})}
-function topics(){
- return categories.map(c=>{const arr=feedback.filter(f=>f.category===c);const negative=arr.filter(f=>f.sentiment==='负向').length;const impact=arr.length?mean(arr,'impact'):topicInfo[c].impact;const score=arr.length?(arr.length*0.8+negative*0.65+impact*0.7):0;return {category:c,items:arr,count:arr.length,negative:negative,impact:impact,rating:mean(arr,'rating'),score:score,info:topicInfo[c]}}).filter(t=>t.count>0).sort((a,b)=>b.score-a.score)
-}
-function updateCategoryOptions(){
- const sel=$('categoryFilter'),old=sel.value;sel.innerHTML='<option value="all">全部分类</option>'+categories.map(c=>'<option value="'+esc(c)+'">'+esc(c)+'</option>').join('');if(categories.includes(old))sel.value=old;
- $('fCategory').innerHTML=categories.map(c=>'<option>'+esc(c)+'</option>').join('')
-}
-function filtered(){
- const q=$('search').value.trim().toLowerCase(),cat=$('categoryFilter').value,sent=$('sentimentFilter').value,st=$('statusFilter').value;
- return feedback.filter(f=>(!q||[f.title,f.text,f.category,f.source].join(' ').toLowerCase().includes(q))&&(cat==='all'||f.category===cat)&&(sent==='all'||f.sentiment===sent)&&(st==='all'||f.status===st)).slice().sort((a,b)=>b.date.localeCompare(a.date))
-}
-function feedbackCards(){
- const list=$('feedbackList'),arr=filtered();list.innerHTML='';$('shownCount').textContent='显示 '+arr.length+' / '+feedback.length+' 条反馈';$('emptyState').hidden=arr.length>0;
- arr.forEach(f=>{
-  const el=document.createElement('article');el.className='feedback';
-  const senti=f.sentiment==='负向'?'tag-neg':f.sentiment==='正向'?'tag-pos':'tag-neu';
-  const statusOpts=['待分析','纳入规划','已解决'].map(s=>'<option '+(s===f.status?'selected':'')+'>'+s+'</option>').join('');
-  el.innerHTML='<div class="feedback-top"><div><div class="feedback-title">'+esc(f.title)+'</div><div class="feedback-meta">'+esc(f.id)+' · '+esc(f.date)+' · '+esc(f.source)+'</div></div><span class="tag '+senti+'">'+esc(f.sentiment)+'</span></div><p class="feedback-text">'+esc(f.text)+'</p><div class="feedback-bottom"><div class="chips"><span class="tag tag-topic">'+esc(f.category)+'</span><span class="tag tag-state">体验 '+esc(f.rating)+'/5</span><span class="tag">影响 '+esc(f.impact)+'/5</span></div><div class="chips"><select class="small-select" data-state="'+esc(f.id)+'" aria-label="更新'+esc(f.id)+'状态">'+statusOpts+'</select><button class="link-button" data-edit="'+esc(f.id)+'">编辑</button><button class="link-button" data-del="'+esc(f.id)+'" style="color:#ffabb9">删除</button></div></div>';
-  list.appendChild(el)
- })
-}
-function renderRanking(){
- const ts=topics(),root=$('ranking');root.innerHTML='';
- if(!ts.length){root.innerHTML='<div class="empty">暂无可统计的反馈</div>';return}
- const max=ts[0].score||1;
- ts.slice(0,5).forEach(t=>{const row=document.createElement('div');row.className='rank-row';row.innerHTML='<div class="rank-label">'+esc(t.category)+'<span class="rank-sub">'+t.count+' 条 · '+t.negative+' 条负向</span></div><div class="bar"><div class="bar-fill" style="width:'+Math.max(3,t.score/max*100)+'%"></div></div><div class="rank-score">'+t.score.toFixed(1)+'</div>';row.style.cursor='pointer';row.title='点击筛选该分类';row.addEventListener('click',()=>{$('categoryFilter').value=t.category;selectedCategory=t.category;feedbackCards();renderMatrix();renderSelected()});root.appendChild(row)})
-}
-function renderMatrix(){
- const box=$('matrix');box.querySelectorAll('.matrix-point').forEach(x=>x.remove());
- const ts=topics();const maxCount=Math.max(1,...ts.map(t=>t.count));
- ts.forEach((t,i)=>{
-  const x=12+(t.count/maxCount)*72;const y=88-((t.impact-1)/4)*75;const btn=document.createElement('button');btn.className='matrix-point'+(selectedCategory===t.category?' active':'');btn.style.left=x+'%';btn.style.top=y+'%';btn.style.width=(26+Math.min(9,t.count*2))+'px';btn.style.height=(26+Math.min(9,t.count*2))+'px';btn.textContent=String(i+1);btn.title=t.category+'：'+t.count+' 条反馈，影响 '+t.impact.toFixed(1)+'/5';btn.setAttribute('aria-label','查看'+t.category+'痛点');btn.addEventListener('click',()=>{selectedCategory=t.category;$('categoryFilter').value=t.category;feedbackCards();renderMatrix();renderSelected()});box.appendChild(btn)
- })
-}
-function renderSelected(){
- const t=topics().find(x=>x.category===selectedCategory)||topics()[0];const box=$('selectedInsight');
- if(!t){box.innerHTML='<div class="insight-kicker">SELECTED ISSUE</div><h3>暂无反馈</h3><p>添加反馈后会展示问题洞察。</p>';return}
- box.innerHTML='<div class="insight-kicker">SELECTED ISSUE · '+esc(t.count)+' RECORDS</div><h3>'+esc(t.category)+'</h3><p>'+esc(t.info.why)+'</p><div class="chips" style="margin-top:9px"><span class="priority-pill">影响 '+t.impact.toFixed(1)+'/5</span><span class="priority-pill">'+t.negative+' 条负向反馈</span></div><div class="rec-actions"><button class="btn primary" id="focusCategory">查看相关反馈</button><button class="btn" id="resetCategory">清除筛选</button></div>';
- $('focusCategory').addEventListener('click',()=>{selectedCategory=t.category;$('categoryFilter').value=t.category;feedbackCards();renderMatrix()});
- $('resetCategory').addEventListener('click',()=>{selectedCategory='all';$('categoryFilter').value='all';feedbackCards();renderMatrix();renderSelected()})
-}
-function renderRecommendations(){
- const root=$('recommendations');root.innerHTML='';const ts=topics();if(!ts.length){root.innerHTML='<div class="panel">新增反馈后将显示改进方向。</div>';return}
- ts.slice(0,3).forEach((t,i)=>{const el=document.createElement('article');el.className='rec-card';const tier=i===0?'优先级 P1':i===1?'优先级 P2':'优先级 P3';el.innerHTML='<small>RECOMMENDATION 0'+(i+1)+' · '+tier+'</small><h3>'+esc(t.info.action)+'</h3><p>'+esc(t.info.why)+'</p><p class="metric-note">建议验证指标：'+esc(t.info.metric)+'</p>';root.appendChild(el)})
-}
-function render(){counts();sentiments();updateCategoryOptions();feedbackCards();renderRanking();renderMatrix();renderSelected();renderRecommendations()}
-function openModal(item){
- $('feedbackForm').reset();$('editId').value=item?item.id:'';$('modalTitle').textContent=item?'编辑反馈':'新增反馈';
- if(item){$('fTitle').value=item.title;$('fCategory').value=item.category;$('fSentiment').value=item.sentiment;$('fRating').value=String(item.rating);$('fImpact').value=String(item.impact);$('fSource').value=item.source;$('fText').value=item.text}
- else{$('fCategory').value='输出质量';$('fSentiment').value='负向';$('fRating').value='2';$('fImpact').value='3';$('fSource').value='示例记录'}
- $('modalBackdrop').classList.add('open');setTimeout(()=>$('fTitle').focus(),40)
-}
-function closeModal(){$('modalBackdrop').classList.remove('open')}
-function exportCSV(){
- const rows=[['ID','日期','反馈标题','反馈内容','问题分类','情绪','体验评分','影响等级','来源','跟进状态'],...feedback.map(f=>[f.id,f.date,f.title,f.text,f.category,f.sentiment,f.rating,f.impact,f.source,f.status])];
- const csv='\ufeff'+rows.map(row=>row.map(v=>'"'+String(v==null?'':v).replace(/"/g,'""')+'"').join(',')).join('\r\n');const blob=new Blob([csv],{type:'text/csv;charset=utf-8;'});const url=URL.createObjectURL(blob);const a=document.createElement('a');a.href=url;a.download='产品反馈洞察数据.csv';document.body.appendChild(a);a.click();a.remove();URL.revokeObjectURL(url)
-}
-$('addFeedback').addEventListener('click',()=>openModal(null));$('exportCsv').addEventListener('click',exportCSV);
-['search','categoryFilter','sentimentFilter','statusFilter'].forEach(id=>$(id).addEventListener(id==='search'?'input':'change',()=>{if(id==='categoryFilter')selectedCategory=$('categoryFilter').value;feedbackCards();renderSelected()}));
-$('clearFilters').addEventListener('click',()=>{$('search').value='';$('categoryFilter').value='all';$('sentimentFilter').value='all';$('statusFilter').value='all';selectedCategory='all';feedbackCards();renderMatrix();renderSelected()});
-$('feedbackList').addEventListener('change',e=>{const el=e.target.closest('[data-state]');if(!el)return;const item=feedback.find(f=>f.id===el.dataset.state);if(item){item.status=el.value;persist();render()}});
-$('feedbackList').addEventListener('click',e=>{const edit=e.target.closest('[data-edit]'),del=e.target.closest('[data-del]');if(edit){const item=feedback.find(f=>f.id===edit.dataset.edit);if(item)openModal(item)}if(del){const item=feedback.find(f=>f.id===del.dataset.del);if(item&&confirm('确定删除这条反馈吗？')){feedback=feedback.filter(f=>f.id!==item.id);persist();render()}}});
-$('feedbackForm').addEventListener('submit',e=>{
- e.preventDefault();const editId=$('editId').value;
- const item={id:editId||('F-'+Date.now().toString(36).toUpperCase()),date:new Date().toISOString().slice(0,10),title:$('fTitle').value.trim(),text:$('fText').value.trim(),category:$('fCategory').value,sentiment:$('fSentiment').value,rating:Number($('fRating').value),impact:Number($('fImpact').value),source:$('fSource').value,status:'待分析'};
- if(editId){const old=feedback.find(f=>f.id===editId);if(old){item.status=old.status;item.date=old.date;feedback=feedback.map(f=>f.id===editId?item:f)}}else feedback.unshift(item);
- persist();selectedCategory='all';$('search').value='';$('categoryFilter').value='all';$('sentimentFilter').value='all';$('statusFilter').value='all';render();closeModal()
-});
-$('closeModal').addEventListener('click',closeModal);$('cancelModal').addEventListener('click',closeModal);$('modalBackdrop').addEventListener('click',e=>{if(e.target===$('modalBackdrop'))closeModal()});window.addEventListener('keydown',e=>{if(e.key==='Escape')closeModal()});
-updateCategoryOptions();render();
-})();
-</script>
+  <div class="wrap">
+    <a class="back" href="index.html">← 返回作品集</a>
+  </div>
+
+  <header class="wrap hero">
+    <div class="kicker">PROJECT 04 · PRODUCT INSIGHTS</div>
+    <h1>产品反馈洞察工作台</h1>
+    <p class="lede">从反馈收集、分类与情绪识别，到高频痛点排序、优先级矩阵与状态跟进，形成一条完整的「信息 → 洞察 → 行动」分析链路。下方为可交互的静态预览（演示数据），用于展示产品数据分析与方案设计能力。</p>
+    <div class="badge">演示数据 · 仅用于展示分析流程</div>
+  </header>
+
+  <main class="wrap">
+    <!-- KPI -->
+    <section>
+      <div class="section-head">
+        <div>
+          <div class="section-index">01 / Overview</div>
+          <h2>核心指标</h2>
+        </div>
+        <p class="section-note">统计窗口：最近 30 天</p>
+      </div>
+      <div class="kpi-grid">
+        <div class="card kpi">
+          <div class="label">收集反馈总数</div>
+          <div class="value">1,284</div>
+          <div class="delta good-up">↑ 18% 环比</div>
+        </div>
+        <div class="card kpi">
+          <div class="label">负面反馈占比</div>
+          <div class="value">23.6%</div>
+          <div class="delta down">↓ 4.2pt 环比</div>
+        </div>
+        <div class="card kpi">
+          <div class="label">平均首次响应</div>
+          <div class="value">6.4<span style="font-size:16px;color:var(--muted)">h</span></div>
+          <div class="delta down">↓ 1.8h 环比</div>
+        </div>
+        <div class="card kpi">
+          <div class="label">本周已闭环</div>
+          <div class="value">41</div>
+          <div class="delta good-up">↑ 12 项</div>
+        </div>
+      </div>
+    </section>
+
+    <!-- sentiment + pain -->
+    <section>
+      <div class="section-head">
+        <div>
+          <div class="section-index">02 / Distribution</div>
+          <h2>情绪分布 &amp; 高频痛点</h2>
+        </div>
+      </div>
+      <div class="two-col">
+        <div class="card">
+          <div style="font-size:13px;color:var(--muted);margin-bottom:14px">反馈情绪构成</div>
+          <div class="donut-wrap">
+            <svg class="donut" viewBox="0 0 160 160" aria-label="情绪分布环形图">
+              <g transform="rotate(-90 80 80)" fill="none" stroke-width="20">
+                <circle cx="80" cy="80" r="60" stroke="rgba(255,255,255,.06)"/>
+                <!-- 正面 61% -->
+                <circle cx="80" cy="80" r="60" stroke="#6fe0a8"
+                  stroke-dasharray="230.4 145.1" stroke-dashoffset="0"/>
+                <!-- 中性 15% -->
+                <circle cx="80" cy="80" r="60" stroke="#ffce6b"
+                  stroke-dasharray="56.5 319.0" stroke-dashoffset="-230.4"/>
+                <!-- 负面 24% -->
+                <circle cx="80" cy="80" r="60" stroke="#ff8a8a"
+                  stroke-dasharray="90.3 285.2" stroke-dashoffset="-286.9"/>
+              </g>
+              <text x="80" y="74" text-anchor="middle" fill="#f6f7fb" font-size="22" font-weight="700">1,284</text>
+              <text x="80" y="92" text-anchor="middle" fill="#a1a8bb" font-size="10">总反馈</text>
+            </svg>
+            <div class="legend">
+              <div class="row"><span class="dot" style="background:#6fe0a8"></span>正面 <span class="num">61%</span></div>
+              <div class="row"><span class="dot" style="background:#ffce6b"></span>中性 <span class="num">15%</span></div>
+              <div class="row"><span class="dot" style="background:#ff8a8a"></span>负面 <span class="num">24%</span></div>
+            </div>
+          </div>
+          <div style="font-size:12px;color:var(--muted);margin-top:18px;line-height:1.8">
+            负面反馈中，<b style="color:#f6f7fb">功能缺失</b>占 38%、<b style="color:#f6f7fb">性能卡顿</b>占 24%、<b style="color:#f6f7fb">易用性</b>占 18%、<b style="color:#f6f7fb">计费</b>占 12%、其他 8%。
+          </div>
+        </div>
+
+        <div class="card">
+          <div style="font-size:13px;color:var(--muted);margin-bottom:16px">高频痛点 Top 5（按提及次数）</div>
+          <div class="bar-row">
+            <div class="bar-name">导出仅支持 CSV，缺 Excel / PDF</div>
+            <div class="bar-count">312</div>
+            <div class="bar-track"><div class="bar-fill" style="width:100%"></div></div>
+          </div>
+          <div class="bar-row">
+            <div class="bar-name">移动端列表加载慢（&gt;3s）</div>
+            <div class="bar-count">247</div>
+            <div class="bar-track"><div class="bar-fill" style="width:79%"></div></div>
+          </div>
+          <div class="bar-row">
+            <div class="bar-name">批量操作缺少二次确认</div>
+            <div class="bar-count">189</div>
+            <div class="bar-track"><div class="bar-fill" style="width:61%"></div></div>
+          </div>
+          <div class="bar-row">
+            <div class="bar-name">深色模式对比度不足</div>
+            <div class="bar-count">143</div>
+            <div class="bar-track"><div class="bar-fill" style="width:46%"></div></div>
+          </div>
+          <div class="bar-row">
+            <div class="bar-name">通知聚合规则不清晰</div>
+            <div class="bar-count">121</div>
+            <div class="bar-track"><div class="bar-fill" style="width:39%"></div></div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- filterable samples -->
+    <section>
+      <div class="section-head">
+        <div>
+          <div class="section-index">03 / Explore</div>
+          <h2>反馈样本 · 情绪筛选</h2>
+        </div>
+        <p class="section-note">点击筛选标签，查看不同情绪反馈</p>
+      </div>
+      <div class="card">
+        <div class="filters" id="filters">
+          <button class="fbtn active" data-f="all">全部</button>
+          <button class="fbtn" data-f="neg">负面</button>
+          <button class="fbtn" data-f="neu">中性</button>
+          <button class="fbtn" data-f="pos">正面</button>
+        </div>
+        <div class="count-line" id="countLine">共 8 条样本反馈</div>
+        <div class="sample-list" id="sampleList">
+          <div class="sample" data-s="neg"><span class="tag neg">负面</span><div><div class="body">希望能导出 Excel，现在只有 CSV，财务还要手动转。</div><div class="cat">功能缺失 · 导出</div></div></div>
+          <div class="sample" data-s="neg"><span class="tag neg">负面</span><div><div class="body">移动端列表打开很慢，地铁上经常等加载。</div><div class="cat">性能 · 移动端</div></div></div>
+          <div class="sample" data-s="neu"><span class="tag neu">中性</span><div><div class="body">批量删除没有确认弹窗，有点担心误删。</div><div class="cat">体验 · 安全</div></div></div>
+          <div class="sample" data-s="pos"><span class="tag pos">正面</span><div><div class="body">新版搜索速度快了很多，体验提升明显。</div><div class="cat">体验 · 搜索</div></div></div>
+          <div class="sample" data-s="neg"><span class="tag neg">负面</span><div><div class="body">深色模式下部分文字看不清，对比度不够。</div><div class="cat">易用性 · 视觉</div></div></div>
+          <div class="sample" data-s="neu"><span class="tag neu">中性</span><div><div class="body">通知太多，分不清哪些重要。</div><div class="cat">通知 · 信息架构</div></div></div>
+          <div class="sample" data-s="pos"><span class="tag pos">正面</span><div><div class="body">模板功能帮我省了大量重复工作。</div><div class="cat">功能 · 模板</div></div></div>
+          <div class="sample" data-s="neg"><span class="tag neg">负面</span><div><div class="body">续费提醒来得太突然，希望能提前几天。</div><div class="cat">计费 · 提醒</div></div></div>
+        </div>
+      </div>
+    </section>
+
+    <!-- priority matrix -->
+    <section>
+      <div class="section-head">
+        <div>
+          <div class="section-index">04 / Prioritize</div>
+          <h2>优先级矩阵</h2>
+        </div>
+        <p class="section-note">横轴：落地投入　纵轴：用户影响</p>
+      </div>
+      <div class="card">
+        <div class="matrix">
+          <div class="axis"></div>
+          <div class="axis">低投入 → 高投入</div>
+          <div class="axis"></div>
+
+          <div class="axis y">高影响 ↑</div>
+          <div class="quad do">
+            <div class="qtitle">马上做（高影响 · 低投入）</div>
+            <div class="qi">导出增加 Excel / PDF</div>
+            <div class="qi">批量操作二次确认弹窗</div>
+          </div>
+          <div class="quad watch">
+            <div class="qtitle">重点投入（高影响 · 高投入）</div>
+            <div class="qi">移动端列表性能重构</div>
+            <div class="qi">统一通知中心</div>
+          </div>
+
+          <div class="axis y">低影响 ↓</div>
+          <div class="quad plan">
+            <div class="qtitle">顺手做（低影响 · 低投入）</div>
+            <div class="qi">通知文案与分组优化</div>
+            <div class="qi">空状态引导文案</div>
+          </div>
+          <div class="quad hold">
+            <div class="qtitle">暂缓（低影响 · 高投入）</div>
+            <div class="qi">通知系统整体重做</div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- status tracker -->
+    <section>
+      <div class="section-head">
+        <div>
+          <div class="section-index">05 / Track</div>
+          <h2>状态跟进</h2>
+        </div>
+      </div>
+      <div class="kanban">
+        <div class="col">
+          <h3><span class="pill todo"></span>待处理 <span class="n">2</span></h3>
+          <div class="kitem">移动端列表加载慢<div class="meta">高影响 · 评估中</div></div>
+          <div class="kitem">续费提前提醒<div class="meta">中影响 · 待排期</div></div>
+        </div>
+        <div class="col">
+          <h3><span class="pill doing"></span>处理中 <span class="n">2</span></h3>
+          <div class="kitem">导出格式扩展（Excel/PDF）<div class="meta">开发中 · 本周交付</div></div>
+          <div class="kitem">批量操作确认弹窗<div class="meta">设计中</div></div>
+        </div>
+        <div class="col">
+          <h3><span class="pill done"></span>已闭环 <span class="n">2</span></h3>
+          <div class="kitem">深色模式对比度<div class="meta">已发布 v2.3</div></div>
+          <div class="kitem">搜索响应优化<div class="meta">已发布 v2.2</div></div>
+        </div>
+        <div class="col">
+          <h3><span class="pill plan"></span>已规划 <span class="n">1</span></h3>
+          <div class="kitem">统一通知中心<div class="meta">Q4 路线图</div></div>
+        </div>
+      </div>
+    </section>
+
+    <!-- suggestions -->
+    <section>
+      <div class="section-head">
+        <div>
+          <div class="section-index">06 / Act</div>
+          <h2>产品改进建议</h2>
+        </div>
+        <p class="section-note">由洞察自动生成的行动规划</p>
+      </div>
+      <div class="sug-grid">
+        <div class="card sug">
+          <div class="horizon">短期 · 0–2 周</div>
+          <h3>止血高频痛点</h3>
+          <ul>
+            <li>导出新增 Excel / PDF，消除 312 次提及的最高频诉求</li>
+            <li>批量删除 / 移动增加二次确认，降低误操作风险</li>
+          </ul>
+        </div>
+        <div class="card sug">
+          <div class="horizon">中期 · 1–2 月</div>
+          <h3>体验与性能</h3>
+          <ul>
+            <li>移动端列表引入虚拟滚动 + 图片懒加载，目标 &lt;1.5s</li>
+            <li>深色模式全局对比度复核，建立设计规范</li>
+          </ul>
+        </div>
+        <div class="card sug">
+          <div class="horizon">长期 · 季度</div>
+          <h3>系统化能力</h3>
+          <ul>
+            <li>搭建统一通知中心，聚合规则可配置</li>
+            <li>建立反馈→指标→迭代的常态化看板</li>
+          </ul>
+        </div>
+      </div>
+      <div class="method">
+        数据口径：本页为<b style="color:#f6f7fb">演示用模拟数据</b>，用于展示「收集 → 分类筛选 → 排序 → 优先级 → 跟进 → 建议」的分析流程；真实部署可将反馈源接入后端 API（如 <code>/api/feedback</code>），由服务端完成情绪识别与聚合，前端仅负责可视化与交互。所有数字均为示例，不对应任何真实产品。
+      </div>
+    </section>
+  </main>
+
+  <footer class="wrap">
+    <span>© 2026 Yuki · 产品反馈洞察工作台（演示）</span>
+    <a href="index.html">返回作品集 ↑</a>
+  </footer>
+
+  <script>
+    (function () {
+      var filters = document.getElementById('filters');
+      var list = document.getElementById('sampleList');
+      var items = list.querySelectorAll('.sample');
+      var countLine = document.getElementById('countLine');
+      filters.addEventListener('click', function (e) {
+        var btn = e.target.closest('.fbtn');
+        if (!btn) return;
+        filters.querySelectorAll('.fbtn').forEach(function (b) { b.classList.remove('active'); });
+        btn.classList.add('active');
+        var f = btn.getAttribute('data-f');
+        var shown = 0;
+        items.forEach(function (it) {
+          var match = (f === 'all') || (it.getAttribute('data-s') === f);
+          it.classList.toggle('hide', !match);
+          if (match) shown++;
+        });
+        countLine.textContent = '共 ' + shown + ' 条' + (f === 'all' ? '样本反馈' : (f === 'neg' ? '负面反馈' : f === 'neu' ? '中性反馈' : '正面反馈'));
+      });
+    })();
+  </script>
 </body>
 </html>

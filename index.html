@@ -1,4 +1,3 @@
-
 <!DOCTYPE html>
 <html lang="zh-CN">
 <head>
@@ -7,11 +6,11 @@
   <meta name="theme-color" content="#0b0d14">
   <meta name="description" content="Yuki 的个人作品集，记录科研项目、材料探索与成长经历。">
   <title>Yuki — Personal Portfolio</title>
+  <script type="module" src="https://cdn.jsdelivr.net/npm/@google/model-viewer@4.4.0/dist/model-viewer.min.js"></script>
   <style>
     :root {
       --bg: #0b0d14;
       --panel: #131722;
-      --panel2: #191d2b;
       --white: #f6f7fb;
       --muted: #a1a8bb;
       --blue: #7aa7ff;
@@ -37,372 +36,84 @@
     a { color: inherit; text-decoration: none; }
     button, a { -webkit-tap-highlight-color: transparent; }
 
-    .wrap {
-      width: min(var(--max), calc(100% - 48px));
-      margin-inline: auto;
-    }
+    .wrap { width: min(var(--max), calc(100% - 48px)); margin-inline: auto; }
 
-    .nav {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      padding: 23px 0;
-      border-bottom: 1px solid var(--line);
-    }
-
-    .brand {
-      font-size: 17px;
-      font-weight: 800;
-      letter-spacing: 1.8px;
-    }
-
+    .nav { display: flex; justify-content: space-between; align-items: center; padding: 23px 0; border-bottom: 1px solid var(--line); }
+    .brand { font-size: 17px; font-weight: 800; letter-spacing: 1.8px; }
     .brand span { color: var(--blue); }
-
-    .links {
-      display: flex;
-      align-items: center;
-      gap: 27px;
-      color: var(--muted);
-      font-size: 13px;
-    }
-
+    .links { display: flex; align-items: center; gap: 27px; color: var(--muted); font-size: 13px; }
     .links a { transition: color .2s; }
     .links a:hover { color: var(--white); }
 
-    .hero {
-      min-height: 650px;
-      display: grid;
-      grid-template-columns: 1.15fr .85fr;
-      gap: 38px;
-      align-items: center;
-      padding: 72px 0 90px;
-    }
-
-    .kicker {
-      display: flex;
-      align-items: center;
-      gap: 10px;
-      color: var(--blue);
-      text-transform: uppercase;
-      letter-spacing: 2.8px;
-      font-size: 11px;
-      font-weight: 700;
-    }
-
-    .kicker::before {
-      content: "";
-      width: 24px;
-      height: 1px;
-      background: currentColor;
-    }
-
-    h1 {
-      margin: 26px 0 24px;
-      font-size: clamp(54px, 8vw, 100px);
-      line-height: .99;
-      letter-spacing: -.065em;
-      font-weight: 750;
-    }
-
+    .hero { min-height: 650px; display: grid; grid-template-columns: 1.15fr .85fr; gap: 38px; align-items: center; padding: 72px 0 90px; }
+    .kicker { display: flex; align-items: center; gap: 10px; color: var(--blue); text-transform: uppercase; letter-spacing: 2.8px; font-size: 11px; font-weight: 700; }
+    .kicker::before { content: ""; width: 24px; height: 1px; background: currentColor; }
+    h1 { margin: 26px 0 24px; font-size: clamp(54px, 8vw, 100px); line-height: .99; letter-spacing: -.065em; font-weight: 750; }
     h1 .line { display: block; }
-    h1 .gradient {
-      color: transparent;
-      background: linear-gradient(100deg, #8bb8ff, #c7a8ff 75%);
-      -webkit-background-clip: text;
-      background-clip: text;
-    }
-
-    .intro {
-      max-width: 490px;
-      color: var(--muted);
-      font-size: 15px;
-      line-height: 1.95;
-    }
-
-    .actions {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 12px;
-      margin-top: 29px;
-    }
-
-    .btn {
-      display: inline-flex;
-      justify-content: center;
-      align-items: center;
-      gap: 10px;
-      padding: 11px 18px;
-      border: 1px solid var(--line);
-      border-radius: 100px;
-      font-size: 13px;
-      transition: transform .2s, background .2s, border-color .2s;
-    }
-
+    h1 .gradient { color: transparent; background: linear-gradient(100deg, #8bb8ff, #c7a8ff 75%); -webkit-background-clip: text; background-clip: text; }
+    .intro { max-width: 490px; color: var(--muted); font-size: 15px; line-height: 1.95; }
+    .actions { display: flex; flex-wrap: wrap; gap: 12px; margin-top: 29px; }
+    .btn { display: inline-flex; justify-content: center; align-items: center; gap: 10px; padding: 11px 18px; border: 1px solid var(--line); border-radius: 100px; font-size: 13px; transition: transform .2s, background .2s, border-color .2s; }
     .btn:hover { transform: translateY(-3px); border-color: #8497cb; }
+    .btn.primary { background: var(--white); color: #0b0d14; border-color: var(--white); font-weight: 700; }
 
-    .btn.primary {
-      background: var(--white);
-      color: #0b0d14;
-      border-color: var(--white);
-      font-weight: 700;
-    }
-
-    .art {
-      min-height: 420px;
-      position: relative;
-      display: grid;
-      place-items: center;
-      overflow: hidden;
-      isolation: isolate;
-      border: 1px solid rgba(255,255,255,.13);
-      border-radius: 48% 48% 24px 24px;
-      background:
-        radial-gradient(ellipse at 50% 45%, rgba(116,119,255,.20), transparent 58%),
-        linear-gradient(150deg, #171b2b, #10121c);
-    }
-
-    .art::before {
-      content: "";
-      position: absolute;
-      width: 78%;
-      aspect-ratio: 1;
-      border-radius: 50%;
-      background: linear-gradient(135deg, #75a8ff 4%, #a9a3ff 48%, #d3bcff 75%, #455de0);
-      filter: blur(1px);
-      opacity: .92;
-      transform: rotate(-24deg);
-      animation: float 8s ease-in-out infinite;
-      z-index: -1;
-    }
-
-    .art::after {
-      content: "";
-      position: absolute;
-      width: 42%;
-      aspect-ratio: 1;
-      border-radius: 50%;
-      background: #171a27;
-      border: 1px solid rgba(255,255,255,.2);
-      box-shadow: 0 0 70px rgba(131,146,255,.25);
-      transform: translate(40%, -5%);
-    }
-
-    .orbit {
-      position: absolute;
-      width: 87%;
-      aspect-ratio: 1;
-      border: 1px solid rgba(220,226,255,.28);
-      border-radius: 50%;
-      transform: rotate(-25deg) scaleY(.65);
-    }
-
-    .art-label {
-      position: absolute;
-      left: 23px;
-      right: 23px;
-      bottom: 22px;
-      display: flex;
-      justify-content: space-between;
-      color: #c5c9dc;
-      font-size: 10px;
-      letter-spacing: 1.6px;
-    }
-
-    @keyframes float {
-      0%, 100% { transform: translateY(0) rotate(-24deg) scale(1); }
-      50% { transform: translateY(-12px) rotate(-12deg) scale(1.03); }
-    }
+    .art { min-height: 420px; position: relative; display: grid; place-items: center; overflow: hidden; isolation: isolate; border: 1px solid rgba(255,255,255,.13); border-radius: 48% 48% 24px 24px; background: radial-gradient(ellipse at 50% 45%, rgba(116,119,255,.20), transparent 58%), linear-gradient(150deg, #171b2b, #10121c); }
+    .art::before { content: ""; position: absolute; width: 78%; aspect-ratio: 1; border-radius: 50%; background: linear-gradient(135deg, #75a8ff 4%, #a9a3ff 48%, #d3bcff 75%, #455de0); filter: blur(1px); opacity: .92; transform: rotate(-24deg); animation: float 8s ease-in-out infinite; z-index: -1; }
+    .art::after { content: ""; position: absolute; width: 42%; aspect-ratio: 1; border-radius: 50%; background: #171a27; border: 1px solid rgba(255,255,255,.2); box-shadow: 0 0 70px rgba(131,146,255,.25); transform: translate(40%, -5%); }
+    .orbit { position: absolute; width: 87%; aspect-ratio: 1; border: 1px solid rgba(220,226,255,.28); border-radius: 50%; transform: rotate(-25deg) scaleY(.65); }
+    .art-label { position: absolute; left: 23px; right: 23px; bottom: 22px; display: flex; justify-content: space-between; color: #c5c9dc; font-size: 10px; letter-spacing: 1.6px; }
+    @keyframes float { 0%, 100% { transform: translateY(0) rotate(-24deg) scale(1); } 50% { transform: translateY(-12px) rotate(-12deg) scale(1.03); } }
 
     section { padding: 48px 0; }
+    .section-head { display: flex; justify-content: space-between; align-items: end; gap: 20px; margin-bottom: 27px; }
+    .section-index { color: var(--blue); font-size: 11px; text-transform: uppercase; letter-spacing: 2.5px; }
+    h2 { margin: 8px 0 0; font-size: clamp(30px, 4vw, 46px); letter-spacing: -.045em; line-height: 1.2; }
+    .section-note { color: var(--muted); font-size: 12px; margin: 0; }
 
-    .section-head {
-      display: flex;
-      justify-content: space-between;
-      align-items: end;
-      gap: 20px;
-      margin-bottom: 27px;
-    }
+    .about-grid, .project-grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 16px; }
+    .card { padding: 27px; border: 1px solid var(--line); border-radius: 17px; background: linear-gradient(145deg, rgba(27,32,47,.92), rgba(16,18,28,.92)); }
+    .card h3 { font-size: 20px; margin: 0 0 10px; letter-spacing: -.4px; }
+    .card p { color: var(--muted); font-size: 13px; margin: 0; line-height: 1.9; }
+    .chips { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 20px; }
+    .chip { color: #d2d8f2; border: 1px solid rgba(175,188,255,.18); background: rgba(120,144,255,.06); border-radius: 100px; padding: 4px 10px; font-size: 10px; }
 
-    .section-index {
-      color: var(--blue);
-      font-size: 11px;
-      text-transform: uppercase;
-      letter-spacing: 2.5px;
-    }
-
-    h2 {
-      margin: 8px 0 0;
-      font-size: clamp(30px, 4vw, 46px);
-      letter-spacing: -.045em;
-      line-height: 1.2;
-    }
-
-    .section-note {
-      color: var(--muted);
-      font-size: 12px;
-      margin: 0;
-    }
-
-    .about-grid, .project-grid {
-      display: grid;
-      grid-template-columns: repeat(2, minmax(0, 1fr));
-      gap: 16px;
-    }
-
-    .card {
-      padding: 27px;
-      border: 1px solid var(--line);
-      border-radius: 17px;
-      background: linear-gradient(145deg, rgba(27,32,47,.92), rgba(16,18,28,.92));
-    }
-
-    .card h3 {
-      font-size: 20px;
-      margin: 0 0 10px;
-      letter-spacing: -.4px;
-    }
-
-    .card p {
-      color: var(--muted);
-      font-size: 13px;
-      margin: 0;
-      line-height: 1.9;
-    }
-
-    .chips {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 8px;
-      margin-top: 20px;
-    }
-
-    .chip {
-      color: #d2d8f2;
-      border: 1px solid rgba(175,188,255,.18);
-      background: rgba(120,144,255,.06);
-      border-radius: 100px;
-      padding: 4px 10px;
-      font-size: 10px;
-    }
-
-    .project {
-      position: relative;
-      min-height: 255px;
-      overflow: hidden;
-      transition: transform .25s, border-color .25s;
-    }
-
-    .project:hover {
-      transform: translateY(-5px);
-      border-color: rgba(153,170,255,.55);
-    }
-
-    .project::after {
-      content: "";
-      position: absolute;
-      width: 135px;
-      height: 135px;
-      right: -60px;
-      top: -65px;
-      border-radius: 50%;
-      background: radial-gradient(circle, rgba(127,153,255,.20), transparent 70%);
-      pointer-events: none;
-    }
-
-    .project-no {
-      color: var(--blue);
-      font-size: 11px;
-      letter-spacing: 2px;
-    }
-
+    .project { position: relative; min-height: 255px; overflow: hidden; transition: transform .25s, border-color .25s; }
+    .project:hover { transform: translateY(-5px); border-color: rgba(153,170,255,.55); }
+    .project::after { content: ""; position: absolute; width: 135px; height: 135px; right: -60px; top: -65px; border-radius: 50%; background: radial-gradient(circle, rgba(127,153,255,.20), transparent 70%); pointer-events: none; }
+    .project-no { color: var(--blue); font-size: 11px; letter-spacing: 2px; }
     .project h3 { margin-top: 22px; }
+    .project-link { display: inline-flex; align-items: center; gap: 9px; margin-top: 20px; padding: 8px 13px; border: 1px solid rgba(162,180,255,.24); border-radius: 999px; color: #d9def5; background: rgba(130,149,255,.07); font-size: 11px; font-weight: 700; transition: transform .2s, border-color .2s, background .2s; }
+    .project-link:hover { transform: translateY(-2px); border-color: rgba(162,180,255,.58); background: rgba(130,149,255,.14); }
 
-    .project-link {
-      display: inline-flex;
-      align-items: center;
-      gap: 9px;
-      margin-top: 20px;
-      padding: 8px 13px;
-      border: 1px solid rgba(162,180,255,.24);
-      border-radius: 999px;
-      color: #d9def5;
-      background: rgba(130,149,255,.07);
-      font-size: 11px;
-      font-weight: 700;
-      transition: transform .2s, border-color .2s, background .2s;
-    }
-    .project-link:hover {
-      transform: translateY(-2px);
-      border-color: rgba(162,180,255,.58);
-      background: rgba(130,149,255,.14);
-    }
+    .project.featured { display: flex; flex-direction: column; }
+    .mv-stage { position: relative; width: 100%; aspect-ratio: 16 / 10; border-radius: 14px; overflow: hidden; border: 1px solid var(--line); background: radial-gradient(ellipse at 50% 28%, rgba(122,127,255,.20), transparent 62%), linear-gradient(160deg, #141a2c, #0d1120); display: grid; place-items: center; }
+    .mv-stage model-viewer { position: relative; width: 100%; height: 100%; background: transparent; --poster-color: transparent; z-index: 2; }
+    .mv-fallback { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: contain; z-index: 1; transition: opacity .6s ease; }
+    .mv-hint { position: absolute; z-index: 0; text-align: center; color: #c5c9dc; }
+    .mv-hint .big { font-size: 64px; filter: drop-shadow(0 0 25px #9e9aff66); }
+    .mv-hint .small { font-size: 11px; letter-spacing: 1.6px; margin-top: 6px; color: var(--muted); }
+    .mv-caption { position: absolute; left: 14px; bottom: 12px; z-index: 3; font-size:10px; letter-spacing: 1.4px; color: #d6daec; background: rgba(11,13,20,.55); border: 1px solid rgba(255,255,255,.12); padding: 5px 10px; border-radius: 9px; backdrop-filter: blur(4px); }
 
-    .timeline {
-      border-left: 1px solid rgba(170,183,255,.3);
-      margin-left: 7px;
-      padding-left: 26px;
-    }
-
-    .timeline-item {
-      position: relative;
-      padding: 0 0 29px;
-    }
-
+    .timeline { border-left: 1px solid rgba(170,183,255,.3); margin-left: 7px; padding-left: 26px; }
+    .timeline-item { position: relative; padding: 0 0 29px; }
     .timeline-item:last-child { padding-bottom: 0; }
-
-    .timeline-item::before {
-      content: "";
-      position: absolute;
-      width: 9px;
-      height: 9px;
-      border-radius: 50%;
-      left: -31px;
-      top: 9px;
-      background: var(--purple);
-      box-shadow: 0 0 15px rgba(193,165,255,.5);
-    }
-
+    .timeline-item::before { content: ""; position: absolute; width: 9px; height: 9px; border-radius: 50%; left: -31px; top: 9px; background: var(--purple); box-shadow: 0 0 15px rgba(193,165,255,.5); }
     .timeline-item h3 { margin: 0 0 5px; font-size: 16px; }
     .timeline-item p { margin: 0; color: var(--muted); font-size: 13px; }
 
-    .contact {
-      position: relative;
-      overflow: hidden;
-      margin: 40px 0 70px;
-      padding: clamp(27px, 6vw, 58px);
-      border: 1px solid var(--line);
-      border-radius: 23px;
-      background:
-        radial-gradient(ellipse at 100% 0%, rgba(125,127,255,.20), transparent 45%),
-        linear-gradient(125deg, #171c2b, #11131d);
-    }
-
+    .contact { position: relative; overflow: hidden; margin: 40px 0 70px; padding: clamp(27px, 6vw, 58px); border: 1px solid var(--line); border-radius: 23px; background: radial-gradient(ellipse at 100% 0%, rgba(125,127,255,.20), transparent 45%), linear-gradient(125deg, #171c2b, #11131d); }
     .contact h2 { max-width: 600px; font-size: clamp(34px, 5.5vw, 58px); }
     .contact p { color: var(--muted); font-size: 14px; }
     .contact .actions { margin-top: 24px; }
 
-    footer {
-      display: flex;
-      justify-content: space-between;
-      gap: 15px;
-      padding: 23px 0 34px;
-      border-top: 1px solid var(--line);
-      color: var(--muted);
-      font-size: 11px;
-    }
-
+    footer { display: flex; justify-content: space-between; gap: 15px; padding: 23px 0 34px; border-top: 1px solid var(--line); color: var(--muted); font-size: 11px; }
     footer a:hover { color: var(--white); }
 
     @media (max-width: 720px) {
       .wrap { width: calc(100% - 32px); }
       .nav { padding: 18px 0; }
       .links { gap: 13px; font-size: 11px; }
-      .hero {
-        grid-template-columns: 1fr;
-        min-height: auto;
-        gap: 34px;
-        padding: 62px 0 40px;
-      }
+      .hero { grid-template-columns: 1fr; min-height: auto; gap: 34px; padding: 62px 0 40px; }
       h1 { font-size: clamp(56px, 14vw, 82px); }
       .art { min-height: 300px; }
       section { padding: 38px 0; }
@@ -413,19 +124,9 @@
       .contact { margin: 25px 0 48px; }
       footer { flex-direction: column; }
     }
-
-    @media (max-width: 390px) {
-      .links { gap: 9px; font-size: 10px; }
-      .brand { font-size: 15px; }
-      .wrap { width: calc(100% - 26px); }
-    }
-
     @media (prefers-reduced-motion: reduce) {
       html { scroll-behavior: auto; }
-      *, *::before, *::after {
-        animation-duration: .01ms !important;
-        transition-duration: .01ms !important;
-      }
+      *, *::before, *::after { animation-duration: .01ms !important; transition-duration: .01ms !important; }
     }
   </style>
 </head>
@@ -481,29 +182,19 @@
         </div>
         <p class="section-note">Curiosity drives progress.</p>
       </div>
-
       <div class="about-grid">
         <article class="card">
           <h3>Research · 科研</h3>
-          <p>
-            聚焦电池材料、硅基负极与粘结剂设计。
-            通过材料制备、电化学测试和多尺度表征，
-            探索界面调控与电极性能之间的关系。
-          </p>
+          <p>聚焦电池材料、硅基负极与粘结剂设计。通过材料制备、电化学测试和多尺度表征，探索界面调控与电极性能之间的关系。</p>
           <div class="chips">
             <span class="chip">Battery Materials</span>
             <span class="chip">Silicon Anode</span>
             <span class="chip">Interface Design</span>
           </div>
         </article>
-
         <article class="card">
           <h3>Beyond Research · 成长</h3>
-          <p>
-            重视团队协作、逻辑分析与执行力。
-            在科研之外，我也热爱篮球，
-            享受共同训练、持续进步与团队配合。
-          </p>
+          <p>重视团队协作、逻辑分析与执行力。在科研之外，我也热爱篮球，享受共同训练、持续进步与团队配合。</p>
           <div class="chips">
             <span class="chip">Problem Solving</span>
             <span class="chip">Teamwork</span>
@@ -521,15 +212,11 @@
         </div>
         <p class="section-note">Product thinking · Design · Build.</p>
       </div>
-
       <div class="project-grid">
         <article class="card project">
           <div class="project-no">PROJECT 01</div>
           <h3>全固态硅负极双导粘结剂</h3>
-          <p>
-            设计兼具电子传导与锂离子传输能力的粘结剂体系，
-            研究电极界面稳定性、机械完整性与循环性能。
-          </p>
+          <p>设计兼具电子传导与锂离子传输能力的粘结剂体系，研究电极界面稳定性、机械完整性与循环性能。</p>
           <div class="chips">
             <span class="chip">Solid-State Battery</span>
             <span class="chip">Conductive Binder</span>
@@ -539,27 +226,45 @@
         <article class="card project">
           <div class="project-no">PROJECT 02</div>
           <h3>硅碳负极聚合物粘结剂</h3>
-          <p>
-            通过聚合物组成和界面相互作用设计，
-            探索粘附能力、结构稳定性与电化学表现之间的联系。
-          </p>
+          <p>通过聚合物组成和界面相互作用设计，探索粘附能力、结构稳定性与电化学表现之间的联系。</p>
           <div class="chips">
             <span class="chip">Polymer Design</span>
             <span class="chip">Silicon-Carbon</span>
           </div>
         </article>
 
-        <article class="card project">
-          <div class="project-no">PROJECT 03 · PRODUCT / INTERACTION</div>
-          <h3>莫小菇的孢子漫游｜小游戏设计与开发</h3>
+        <article class="card project featured">
+          <div class="project-no">PROJECT 03 · 角色设计 × 游戏开发</div>
+          <h3>莫小菇的孢子漫游｜原创角色 · 3D 建模 · 小游戏开发</h3>
+          <div class="mv-stage">
+            <div class="mv-hint" id="mvHint">
+              <div class="big">🍄</div>
+              <div class="small">原创 3D 角色「莫小菇」</div>
+            </div>
+            <img class="mv-fallback" id="mvFallback" src="assets/moxiaogu-concept.jpg" onerror="this.style.display='none'" alt="莫小菇角色概念图">
+            <model-viewer id="moxiaoguMv"
+              src="assets/mushroom.glb"
+              alt="莫小菇 3D 角色模型"
+              camera-controls
+              auto-rotate
+              rotation-per-second="20deg"
+              exposure="1.1"
+              camera-orbit="0deg 72deg 105%"
+              interaction-prompt="none"
+              loading="eager">
+            </model-viewer>
+            <div class="mv-caption">拖动旋转 · 滚轮缩放 · 原创 3D 角色「莫小菇」</div>
+          </div>
           <p>
-            以原创角色概念为起点，设计 45 秒孢子收集玩法与完整游戏流程，
-            将规则、得分/连击反馈、倒计时和失败重开转化为可玩的网页原型；
-            支持键盘、鼠标与触屏操作，并兼顾移动端布局。
+            从一张原创角色概念稿出发，在 Blender 中完成「莫小菇」的 3D 建模与渲染，
+            再将其转化为可玩的产品原型：设计 45 秒孢子收集玩法、得分 / 连击反馈、
+            倒计时与失败重开，并用 HTML / CSS / JS 实现支持键盘、鼠标与触屏的网页小游戏，兼顾移动端布局。
           </p>
           <div class="chips">
-            <span class="chip">产品设计</span>
+            <span class="chip">角色设计</span>
+            <span class="chip">Blender 3D</span>
             <span class="chip">交互设计</span>
+            <span class="chip">产品设计</span>
             <span class="chip">HTML / CSS / JS</span>
           </div>
           <a class="project-link" href="game.html">试玩小游戏原型 <span>↗</span></a>
@@ -568,11 +273,7 @@
         <article class="card project">
           <div class="project-no">PROJECT 04 · PRODUCT INSIGHTS</div>
           <h3>产品反馈洞察工作台｜从反馈到产品行动</h3>
-          <p>
-            搭建可交互的反馈分析平台，支持反馈新增、分类与情绪筛选、
-            高频痛点排序、优先级矩阵和状态跟进，并生成产品改进建议。
-            使用明确标注的模拟数据呈现从信息整理到行动规划的完整流程。
-          </p>
+          <p>搭建可交互的反馈分析平台，支持反馈新增、分类与情绪筛选、高频痛点排序、优先级矩阵和状态跟进，并生成产品改进建议。使用明确标注的模拟数据呈现从信息整理到行动规划的完整流程。</p>
           <div class="chips">
             <span class="chip">用户反馈分析</span>
             <span class="chip">数据可视化</span>
@@ -590,7 +291,6 @@
           <h2>成长轨迹</h2>
         </div>
       </div>
-
       <div class="card">
         <div class="timeline">
           <div class="timeline-item">
@@ -615,14 +315,9 @@
         <h2>Good ideas start with a conversation.</h2>
         <p>欢迎交流科研想法、电池材料与未来的可能性。</p>
         <div class="actions">
-          <!-- 请将示例邮箱替换为你自己的邮箱 -->
-          <a class="btn primary" href="mailto:your-email@example.com">
-            给我发邮件 ↗
-          </a>
+          <a class="btn primary" href="mailto:your-email@example.com">给我发邮件 ↗</a>
         </div>
-        <p style="font-size:12px;margin-top:20px">
-          Email: your-email@example.com
-        </p>
+        <p style="font-size:12px;margin-top:20px">Email: your-email@example.com</p>
       </div>
     </section>
   </main>
@@ -631,5 +326,25 @@
     <span>© 2026 Yuki · Personal Portfolio</span>
     <a href="#home">Back to top ↑</a>
   </footer>
+
+  <script>
+    (function () {
+      var mv = document.getElementById('moxiaoguMv');
+      var fb = document.getElementById('mvFallback');
+      var hint = document.getElementById('mvHint');
+      if (!mv) return;
+      mv.addEventListener('load', function () {
+        fb.style.opacity = '0';
+        if (hint) hint.style.display = 'none';
+      });
+      mv.addEventListener('error', function () { if (hint) hint.style.display = 'none'; });
+      setTimeout(function () {
+        if (!('customElements' in window) || !customElements.get('model-viewer')) {
+          mv.style.display = 'none';
+          if (hint) hint.style.display = 'none';
+        }
+      }, 6000);
+    })();
+  </script>
 </body>
 </html>

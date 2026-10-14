@@ -2,7 +2,7 @@
 <html lang="zh-CN">
 <head>
 <meta charset="utf-8">
-<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="viewport" content="initial-scale=1">
 <meta name="theme-color" content="#0b0d14">
 <title>莫小菇的孢子漫游 · MOXIAOGU</title>
 <style>
@@ -22,6 +22,9 @@ main{width:min(960px,100%)}a{color:var(--blue);text-decoration:none}.top{display
 </section><div class="footer">MADE WITH CURIOSITY · YUKI'S PORTFOLIO · 2026</div>
 </main>
 <script>
+// 优先使用你设计的「莫小菇」角色精灵图（assets/moxiaogu-sprite.png）；文件未上传时回退到 emoji
+window.moxiaoImage = new Image();
+window.moxiaoImage.src = 'assets/moxiaogu-sprite.png';
 (()=>{
 const canvas=document.getElementById('game'),ctx=canvas.getContext('2d');
 const $=id=>document.getElementById(id);
@@ -39,18 +42,15 @@ function draw(dt){
  ctx.clearRect(0,0,W,H);
  const g=ctx.createRadialGradient(W*.5,H*.15,5,W*.5,H*.4,W*.8);g.addColorStop(0,'#27264e');g.addColorStop(1,'#0d1423');ctx.fillStyle=g;ctx.fillRect(0,0,W,H);
  for(const s of stars){ctx.globalAlpha=s.a*(.7+.3*Math.sin(performance.now()*.001+s.p));ctx.fillStyle='#d8ddff';ctx.beginPath();ctx.arc(s.x,s.y,s.r,0,Math.PI*2);ctx.fill()}ctx.globalAlpha=1;
- // distant drifting nebulae
  for(let i=0;i<4;i++){ctx.fillStyle=i%2?'#7477ff08':'#8dd8ff08';ctx.beginPath();ctx.ellipse(130+i*245,150+Math.sin(performance.now()*.0003+i)*45,170,45,-.3+i*.12,0,Math.PI*2);ctx.fill()}
  for(const it of items){ctx.save();ctx.translate(it.x,it.y);it.spin+=dt*.8;ctx.rotate(Math.sin(it.spin)*.15);
  const color=it.type==='rare'?'#ffe3a0':it.type==='bad'?'#ff718f':'#a8a0ff';
  ctx.shadowBlur=it.type==='bad'?18:22;ctx.shadowColor=color;ctx.fillStyle=color+'28';ctx.beginPath();ctx.arc(0,0,it.r*1.8,0,Math.PI*2);ctx.fill();ctx.fillStyle=color;ctx.beginPath();ctx.arc(0,0,it.r*.55,0,Math.PI*2);ctx.fill();ctx.fillStyle='#fff';ctx.globalAlpha=.8;ctx.beginPath();ctx.arc(-it.r*.2,-it.r*.2,it.r*.16,0,Math.PI*2);ctx.fill();ctx.restore();ctx.globalAlpha=1}
  for(const p of particles){ctx.globalAlpha=Math.max(0,p.life/p.max);ctx.fillStyle=p.color;ctx.beginPath();ctx.arc(p.x,p.y,p.r,0,Math.PI*2);ctx.fill()}ctx.globalAlpha=1;
- // player glow
  ctx.save();ctx.translate(player.x,player.y);
  const halo=ctx.createRadialGradient(0,0,2,0,0,55);halo.addColorStop(0,'#bca8ff40');halo.addColorStop(1,'#bca8ff00');ctx.fillStyle=halo;ctx.beginPath();ctx.arc(0,0,55,0,Math.PI*2);ctx.fill();
  ctx.shadowColor='#b5a3ff';ctx.shadowBlur=player.invuln>0?28:15;
- // placeholder mushroom; user artwork can be dropped at assets/moxiaogu.png
- if(window.moxiaoImage&&window.moxiaoImage.complete&&window.moxiaoImage.naturalWidth){ctx.drawImage(window.moxiaoImage,-35,-43,70,86)}
+ if(window.moxiaoImage&&window.moxiaoImage.complete&&window.moxiaoImage.naturalWidth){ctx.drawImage(window.moxiaoImage,-42,-52,84,104)}
  else{ctx.font='58px serif';ctx.textAlign='center';ctx.textBaseline='middle';ctx.fillText('🍄',0,0)}
  ctx.restore();ctx.globalAlpha=1;
  if(state==='playing'){ctx.fillStyle='#ffffff18';rounded(22,20,150,4,2);ctx.fill();ctx.fillStyle='#b9a8ff';rounded(22,20,150*Math.max(0,timeLeft/45),4,2);ctx.fill()}
