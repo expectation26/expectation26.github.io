@@ -1,0 +1,138 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="theme-color" content="#0b0d14">
+<meta name="description" content="Yuki 的竞品分析工作台概念项目，支持自定义产品、体验维度与权重，实时生成对比结果。">
+<title>竞品分析工作台 · Yuki Portfolio</title>
+<style>
+:root{--bg:#0b0d14;--panel:#141a29;--panel2:#1b2134;--line:rgba(255,255,255,.12);--text:#f5f6ff;--muted:#a5aec4;--blue:#8bb8ff;--purple:#c6a5ff;--mint:#8fe3d1}
+*{box-sizing:border-box}html{scroll-behavior:smooth}body{margin:0;background:radial-gradient(ellipse at 80% 0%,#38316844,transparent 38%),var(--bg);color:var(--text);font-family:Inter,-apple-system,BlinkMacSystemFont,"Segoe UI","PingFang SC","Microsoft YaHei",sans-serif;line-height:1.7}
+a{color:inherit;text-decoration:none}.wrap{width:min(1120px,calc(100% - 40px));margin:auto}.nav{display:flex;align-items:center;justify-content:space-between;padding:21px 0;border-bottom:1px solid var(--line);font-size:13px;color:var(--muted)}.brand{color:var(--text);font-weight:800;letter-spacing:1.8px}.brand span{color:var(--blue)}.back:hover{color:var(--text)}
+.hero{padding:58px 0 35px;max-width:850px}.eyebrow{font-size:11px;letter-spacing:2.6px;text-transform:uppercase;color:var(--blue)}h1{font-size:clamp(36px,6vw,65px);line-height:1.12;letter-spacing:-2.2px;margin:15px 0}.gradient{background:linear-gradient(100deg,#8bb8ff,#d0aaff);color:transparent;background-clip:text;-webkit-background-clip:text}.lead{color:var(--muted);font-size:15px;max-width:760px}.pill{display:inline-block;font-size:10px;letter-spacing:.7px;border:1px solid #c7a8ff44;background:#c7a8ff0d;color:#ddceff;border-radius:999px;padding:5px 10px;margin:4px 6px 0 0}
+.notice{padding:13px 16px;border-left:2px solid var(--purple);background:#c7a8ff0b;color:#c5cbe0;font-size:12px;margin:24px 0 25px;border-radius:0 10px 10px 0}
+.section-title{display:flex;align-items:end;justify-content:space-between;gap:20px;margin:28px 0 16px}.section-title h2{margin:0;font-size:25px;letter-spacing:-.6px}.section-title p{margin:0;color:var(--muted);font-size:12px}
+.panel{border:1px solid var(--line);border-radius:18px;background:linear-gradient(145deg,#171d2c,#10141f);padding:22px;margin-bottom:16px}.products{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:14px}
+.product-card{border:1px solid var(--line);border-radius:15px;padding:17px;background:#ffffff03;min-width:0}.product-top{display:flex;justify-content:space-between;align-items:center;gap:10px;margin-bottom:14px}.product-top small{color:var(--muted);font-size:10px;letter-spacing:1.2px}.number{display:grid;place-items:center;width:28px;height:28px;border-radius:9px;background:#8bb8ff16;color:var(--blue);font-size:12px;font-weight:800}
+.name-input{width:100%;background:#0e1220;border:1px solid var(--line);border-radius:9px;color:var(--text);padding:10px 11px;font:inherit;font-size:14px;outline:none}.name-input:focus{border-color:#8bb8ff88}
+.score-row{padding:13px 0 7px;border-top:1px solid #ffffff0e}.row-head{display:flex;justify-content:space-between;align-items:center;gap:8px;font-size:12px}.row-head label{color:#d9def0}.score-num{color:var(--blue);font-weight:800;font-variant-numeric:tabular-nums}.range{width:100%;accent-color:#ac9cff;cursor:pointer;margin:12px 0 3px}
+.weights{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:10px}.weight{padding:13px;border:1px solid var(--line);border-radius:12px;background:#ffffff03}.weight label{display:block;font-size:11px;line-height:1.4;min-height:32px;color:#d9def0}.weight strong{display:block;color:var(--purple);font-size:19px;margin-top:3px}.weight input{width:100%;accent-color:#ac9cff;margin-top:8px}
+.results{display:grid;grid-template-columns:.8fr 1.2fr;gap:16px}.winner{display:flex;flex-direction:column;justify-content:center;min-height:205px;background:radial-gradient(ellipse at 80% 10%,#9a86ff20,transparent 60%),#ffffff03}.winner small{color:var(--muted);font-size:11px;letter-spacing:1px}.winner h3{margin:9px 0;font-size:30px;letter-spacing:-1px}.winner p{margin:0;color:var(--muted);font-size:12px}.bigscore{font-size:46px;font-weight:800;line-height:1.25;color:var(--purple);font-variant-numeric:tabular-nums}
+.ranking{display:grid;gap:15px}.rank-head{display:flex;justify-content:space-between;gap:12px;font-size:13px}.rank-head span:last-child{font-weight:800;color:var(--text);font-variant-numeric:tabular-nums}.bar{height:7px;border-radius:8px;background:#ffffff10;overflow:hidden;margin-top:7px}.bar-fill{height:100%;width:0;border-radius:8px;background:linear-gradient(90deg,#8bb8ff,#c6a5ff);transition:width .25s}
+.insights{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:12px}.insight{padding:17px;border:1px solid var(--line);border-radius:13px;background:#ffffff03}.insight span{font-size:10px;color:var(--blue);letter-spacing:1.4px}.insight h3{font-size:15px;margin:7px 0}.insight p{font-size:12px;color:var(--muted);margin:0;line-height:1.8}
+.actions{display:flex;gap:10px;flex-wrap:wrap;margin-top:15px}.btn{border:1px solid var(--line);border-radius:100px;background:#ffffff08;color:var(--text);padding:10px 16px;font-weight:700;font-size:12px;cursor:pointer}.btn.primary{background:linear-gradient(100deg,#8bb8ff,#c6a5ff);color:#131624;border:0}.btn:hover{transform:translateY(-1px)}
+.method{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:12px}.step{border-top:1px solid #9ebaff55;padding-top:12px}.step small{color:var(--blue);letter-spacing:1px;font-size:10px}.step h3{font-size:14px;margin:6px 0}.step p{font-size:12px;color:var(--muted);margin:0}
+footer{display:flex;justify-content:space-between;gap:14px;border-top:1px solid var(--line);padding:23px 0 35px;margin-top:36px;font-size:11px;color:var(--muted)}
+@media(max-width:780px){.products{grid-template-columns:1fr}.product-card{padding:16px}.weights{grid-template-columns:repeat(2,minmax(0,1fr))}.results{grid-template-columns:1fr}.insights{grid-template-columns:1fr}.method{grid-template-columns:repeat(2,minmax(0,1fr))}.section-title{align-items:start;flex-direction:column}.hero{padding-top:38px}.wrap{width:calc(100% - 28px)}}
+@media(prefers-reduced-motion:reduce){html{scroll-behavior:auto}*,*::before,*::after{transition:none!important}}
+</style>
+</head>
+<body>
+<div class="wrap">
+<nav class="nav"><a class="brand" href="./">YUKI<span>.</span></a><a class="back" href="./">← 返回个人主页</a></nav>
+<header class="hero">
+<div class="eyebrow">PROJECT 04 · PRODUCT THINKING</div>
+<h1>让产品差异<br><span class="gradient">变得可比较。</span></h1>
+<p class="lead">竞品分析工作台｜一个面向产品经理、产品运营与策略岗位的个人概念项目。将体验维度、优先级和产品表现放进同一套可编辑框架，帮助团队从“感觉不同”走向“差异可解释、机会可讨论”。</p>
+<div><span class="pill">产品分析</span><span class="pill">竞品研究</span><span class="pill">交互设计</span><span class="pill">数据可视化</span><span class="pill">原生前端</span></div>
+<div class="notice"><strong>案例说明：</strong>当前分值为演示数据，用于展示分析框架和交互原型，不代表对真实产品的实测排名。正式求职作品集建议替换为真实产品体验记录，并附上截图、分析日期和结论依据。</div>
+</header>
+<div class="section-title"><h2>01 / 可交互的对比模型</h2><p>修改名称、评分与权重，结果会实时更新</p></div>
+<section class="panel">
+<p style="margin:0 0 17px;color:var(--muted);font-size:12px">示例场景：比较三种 AI 助手在一个指定任务中的体验表现。产品名称和分数都可以编辑；评分采用 1–5 分主观量表，权重用于表达当前场景下的重要程度。</p>
+<div id="productCards" class="products"></div>
+</section>
+<div class="section-title"><h2>02 / 调整评价维度权重</h2><p>先明确用户任务，再决定什么更重要</p></div>
+<section class="panel">
+<div id="weightCards" class="weights"></div>
+</section>
+<div class="section-title"><h2>03 / 即时汇总</h2><p>加权得分仅用于当前示例维度与权重</p></div>
+<section class="results">
+<div class="panel winner"><small>当前加权得分最高</small><h3 id="winnerName">产品 A</h3><div class="bigscore" id="winnerScore">4.20<span style="font-size:15px;color:var(--muted)"> / 5</span></div><p id="winnerExplain">这是演示数据计算的结果，不代表真实产品排名。</p></div>
+<div class="panel"><div id="ranking" class="ranking"></div><div class="actions"><button class="btn primary" id="copyBtn">复制分析摘要 ↗</button><button class="btn" id="resetBtn">恢复演示数据 ↻</button></div><p id="copyStatus" style="min-height:16px;color:var(--mint);font-size:11px;margin:8px 0 0"></p></div>
+</section>
+<div class="section-title"><h2>04 / 从比较到行动</h2><p>一份能落地的竞品研究，不止于打分</p></div>
+<section class="insights">
+<article class="insight"><span>INSIGHT 01</span><h3>先定义任务场景</h3><p>避免泛泛地问“哪个好用”，先确定用户、目标和成功标准。不同任务应使用不同权重。</p></article>
+<article class="insight"><span>INSIGHT 02</span><h3>记录证据与置信度</h3><p>每个评分都应关联操作步骤、截图或可复现观察；无法验证的功能应标注“待确认”。</p></article>
+<article class="insight"><span>INSIGHT 03</span><h3>把差异转换成机会点</h3><p>找出高权重但整体表现偏弱的维度，提出改版假设，再通过可用性测试或数据验证。</p></article>
+</section>
+<div class="section-title"><h2>05 / 项目方法</h2><p>可复用到内容、消费、AI 工具和效率产品</p></div>
+<section class="panel"><div class="method">
+<div class="step"><small>STEP 01</small><h3>明确目标与用户</h3><p>选定典型任务，界定竞品范围与分析边界。</p></div>
+<div class="step"><small>STEP 02</small><h3>搭建评价框架</h3><p>定义维度、权重、评分标准与证据要求。</p></div>
+<div class="step"><small>STEP 03</small><h3>记录真实体验</h3><p>统一任务路径，记录操作、结果、耗时与异常。</p></div>
+<div class="step"><small>STEP 04</small><h3>提出优先级</h3><p>结合用户价值、改动成本和验证方式形成建议。</p></div>
+</div></section>
+<footer><span>Yuki · Personal Portfolio · 2026</span><a href="./">Back to portfolio ↑</a></footer>
+</div>
+<script>
+(()=>{
+const dims=[
+ {key:'clarity',label:'信息清晰度',weight:5,desc:'结果是否易读、结构是否明确'},
+ {key:'efficiency',label:'任务完成效率',weight:5,desc:'用户需要多少步骤完成任务'},
+ {key:'trust',label:'结果可信度',weight:4,desc:'依据是否清楚、错误是否容易识别'},
+ {key:'continuity',label:'多轮衔接',weight:3,desc:'上下文和追问是否连贯'},
+ {key:'action',label:'结果可执行性',weight:4,desc:'能否自然进入下一步行动'}
+];
+const initial=[
+ {name:'产品 A',scores:{clarity:4,efficiency:4,trust:3,continuity:4,action:3}},
+ {name:'产品 B',scores:{clarity:3,efficiency:5,trust:3,continuity:3,action:4}},
+ {name:'产品 C',scores:{clarity:4,efficiency:3,trust:5,continuity:4,action:4}}
+];
+let products=JSON.parse(JSON.stringify(initial));
+const $=id=>document.getElementById(id);
+function makeProductCards(){
+ const root=$('productCards');root.innerHTML='';
+ products.forEach((p,pi)=>{
+  const card=document.createElement('div');card.className='product-card';
+  const top=document.createElement('div');top.className='product-top';top.innerHTML='<small>COMPARISON '+String(pi+1).padStart(2,'0')+'</small><span class="number">'+String.fromCharCode(65+pi)+'</span>';card.appendChild(top);
+  const name=document.createElement('input');name.className='name-input';name.value=p.name;name.maxLength=32;name.setAttribute('aria-label','产品'+(pi+1)+'名称');name.addEventListener('input',()=>{products[pi].name=name.value||('产品 '+String.fromCharCode(65+pi));renderResults()});card.appendChild(name);
+  dims.forEach(d=>{
+   const row=document.createElement('div');row.className='score-row';
+   const head=document.createElement('div');head.className='row-head';
+   const label=document.createElement('label');label.textContent=d.label;
+   const val=document.createElement('span');val.className='score-num';val.textContent=p.scores[d.key]+' / 5';
+   head.append(label,val);row.appendChild(head);
+   const range=document.createElement('input');range.className='range';range.type='range';range.min='1';range.max='5';range.step='1';range.value=p.scores[d.key];range.setAttribute('aria-label',p.name+' '+d.label);
+   range.addEventListener('input',()=>{products[pi].scores[d.key]=Number(range.value);val.textContent=range.value+' / 5';renderResults()});
+   row.appendChild(range);const hint=document.createElement('div');hint.style='color:#818ba5;font-size:10px';hint.textContent=d.desc;row.appendChild(hint);card.appendChild(row);
+  });root.appendChild(card);
+ });
+}
+function makeWeightCards(){
+ const root=$('weightCards');root.innerHTML='';
+ dims.forEach((d,i)=>{
+  const card=document.createElement('div');card.className='weight';
+  const label=document.createElement('label');label.textContent=d.label;
+  const value=document.createElement('strong');value.textContent='权重 '+d.weight;
+  const range=document.createElement('input');range.type='range';range.min='1';range.max='5';range.step='1';range.value=d.weight;range.setAttribute('aria-label',d.label+'权重');
+  range.addEventListener('input',()=>{dims[i].weight=Number(range.value);value.textContent='权重 '+range.value;renderResults()});
+  card.append(label,value,range);root.appendChild(card);
+ });
+}
+function score(p){let sum=0,weights=0;dims.forEach(d=>{sum+=p.scores[d.key]*d.weight;weights+=d.weight});return weights?sum/weights:0}
+function renderResults(){
+ const ranked=products.map((p,i)=>({p,i,s:score(p)})).sort((a,b)=>b.s-a.s);
+ $('winnerName').textContent=ranked[0].p.name||'未命名产品';$('winnerScore').innerHTML=ranked[0].s.toFixed(2)+'<span style="font-size:15px;color:var(--muted)"> / 5</span>';
+ $('winnerExplain').textContent='基于当前演示评分与权重计算；真实结论需结合体验证据，不应单靠总分决策。';
+ const root=$('ranking');root.innerHTML='';
+ ranked.forEach((r,idx)=>{
+  const item=document.createElement('div');
+  const head=document.createElement('div');head.className='rank-head';const name=document.createElement('span');name.textContent=(idx+1)+'. '+(r.p.name||'未命名产品');const val=document.createElement('span');val.textContent=r.s.toFixed(2)+' / 5';head.append(name,val);
+  const bar=document.createElement('div');bar.className='bar';const fill=document.createElement('div');fill.className='bar-fill';fill.style.width=(r.s/5*100)+'%';bar.appendChild(fill);item.append(head,bar);root.appendChild(item);
+ });
+}
+function reset(){products=JSON.parse(JSON.stringify(initial));dims[0].weight=5;dims[1].weight=5;dims[2].weight=4;dims[3].weight=3;dims[4].weight=4;makeProductCards();makeWeightCards();renderResults();$('copyStatus').textContent=''}
+$('resetBtn').addEventListener('click',reset);
+$('copyBtn').addEventListener('click',async()=>{
+ const ranked=products.map(p=>({name:p.name||'未命名产品',score:score(p)})).sort((a,b)=>b.score-a.score);
+ const text='竞品分析摘要（演示数据）\n'+ranked.map((r,i)=>(i+1)+'. '+r.name+'：'+r.score.toFixed(2)+'/5').join('\n')+'\n评价维度：'+dims.map(d=>d.label+'（权重 '+d.weight+'）').join('、')+'\n注：当前分数为可编辑的演示数据，不能视为真实产品测评结论。';
+ try{await navigator.clipboard.writeText(text);$('copyStatus').textContent='分析摘要已复制。'}catch(e){$('copyStatus').textContent=text}
+});
+makeProductCards();makeWeightCards();renderResults();
+})();
+</script>
+</body>
+</html>
