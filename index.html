@@ -315,9 +315,9 @@
         <h2>Good ideas start with a conversation.</h2>
         <p>欢迎交流科研想法、电池材料与未来的可能性。</p>
         <div class="actions">
-          <a class="btn primary" href="mailto:your-email@example.com">给我发邮件 ↗</a>
+          <button class="btn primary" id="copyEmailBtn" type="button">📋 复制邮箱 13981176747@163.com</button>
         </div>
-        <p style="font-size:12px;margin-top:20px">Email: your-email@example.com</p>
+        <p style="font-size:12px;margin-top:20px">Email: <span id="emailText">13981176747@163.com</span><span id="copyTip" style="color:#7aa7ff;margin-left:8px;opacity:0;transition:opacity .3s">已复制 ✓</span></p>
       </div>
     </section>
   </main>
@@ -344,6 +344,38 @@
           if (hint) hint.style.display = 'none';
         }
       }, 6000);
+    })();
+  </script>
+
+  <script>
+    (function () {
+      var btn = document.getElementById('copyEmailBtn');
+      var tip = document.getElementById('copyTip');
+      if (!btn) return;
+      var email = '13981176747@163.com';
+      var label = '📋 复制邮箱 13981176747@163.com';
+      function feedback() {
+        if (tip) { tip.style.opacity = '1'; setTimeout(function () { tip.style.opacity = '0'; }, 1800); }
+        btn.textContent = '✓ 邮箱已复制';
+        setTimeout(function () { btn.innerHTML = label; }, 1800);
+      }
+      function fallback(text) {
+        var ta = document.createElement('textarea');
+        ta.value = text;
+        ta.style.position = 'fixed';
+        ta.style.opacity = '0';
+        document.body.appendChild(ta);
+        ta.select();
+        try { document.execCommand('copy'); feedback(); } catch (e) {}
+        document.body.removeChild(ta);
+      }
+      btn.addEventListener('click', function () {
+        if (navigator.clipboard && navigator.clipboard.writeText) {
+          navigator.clipboard.writeText(email).then(feedback).catch(function () { fallback(email); });
+        } else {
+          fallback(email);
+        }
+      });
     })();
   </script>
 </body>
