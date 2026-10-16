@@ -15,9 +15,9 @@ main{width:min(960px,100%)}a{color:var(--blue);text-decoration:none}.top{display
 <header class="top"><div><div class="eyebrow">MOXIAOGU · SPORE DRIFT</div><h1>莫小菇的孢子漫游</h1></div><a class="back" href="./">← 返回个人主页</a></header>
 <p class="subtitle">在星雾之间收集发光孢子，避开被污染的暗色孢子。准备好开始一场 45 秒的小小冒险了吗？</p>
 <section class="game-shell" aria-label="孢子漫游游戏">
-<div class="hud"><div class="stats"><div>得分<strong id="score">000</strong></div><div>剩余时间<strong id="time">45</strong></div><div>连击 COMBO<strong id="combo">×0</strong></div></div><div>最高分 <strong id="best" style="display:inline;font-size:14px">0</strong></div></div>
+<div class="hud"><div class="stats"><div>得分<strong id="score">000</strong></div><div>剩余时间<strong id="time">45</strong></div><div>连击 COMBO<strong id="combo">×0</strong></div><div>孢子进度<strong id="sporeProgress" style="font-size:12px">普通 0/12 · 金色 0/3</strong></div></div><div>最高分 <strong id="best" style="display:inline;font-size:14px">0</strong></div></div>
 <div class="game-area"><canvas id="game" width="960" height="540" aria-label="游戏区域，使用方向键移动莫小菇"></canvas>
-<div class="overlay" id="overlay"><div class="modal"><div class="mascot" id="modalMascot">🍄</div><div class="eyebrow">A LITTLE COSMIC ADVENTURE</div><h2 id="modalTitle">准备好出发了吗？</h2><p id="modalText">移动莫小菇，收集蓝紫色的光之孢子。金色孢子分数更高，碰到暗色污染孢子会打断连击。</p><button class="btn primary" id="start">开始漫游 ↗</button><p style="font-size:11px;margin-bottom:0">方向键 / WASD 移动 · 鼠标或触屏也可以</p></div></div></div>
+<div class="overlay" id="overlay"><div class="modal"><div class="mascot" id="modalMascot">🍄</div><div class="eyebrow">A LITTLE COSMIC ADVENTURE</div><h2 id="modalTitle">准备好出发了吗？</h2><p id="modalText">在 45 秒内收集全部 12 颗普通孢子和 3 颗金色孢子，即可获得「今日通关」！小心污染孢子。</p><div id="nameBox" style="margin:16px auto;max-width:300px"><label for="playerName" style="display:block;text-align:left;font-size:12px;color:#aab2c8;margin-bottom:6px">你的冒险者昵称</label><input id="playerName" maxlength="16" autocomplete="nickname" placeholder="输入昵称（最多16字）" style="width:100%;padding:12px 14px;border:1px solid #ffffff30;border-radius:12px;background:#0b0d14;color:#f7f7ff;font:inherit;outline:none"></div><div id="dailyBoard" style="text-align:left;margin:14px auto;max-width:320px;font-size:12px;color:#c0c6dc"></div><button class="btn primary" id="start">开始漫游 ↗</button><p style="font-size:11px;margin-bottom:0">方向键 / WASD 移动 · 鼠标或触屏也可以</p></div></div></div>
 <div class="tips"><span>✦ 收集光之孢子 <b style="color:#b8a7ff">+10</b>　✦ 金色稀有孢子 <b style="color:#ffe0a0">+30</b></span><span><kbd>←</kbd> <kbd>↑</kbd> <kbd>↓</kbd> <kbd>→</kbd> 或 <kbd>W</kbd><kbd>A</kbd><kbd>S</kbd><kbd>D</kbd></span></div>
 </section><div class="footer">MADE WITH CURIOSITY · YUKI'S PORTFOLIO · 2026</div>
 </main>
@@ -31,12 +31,19 @@ const $=id=>document.getElementById(id);
 const W=960,H=540,keys=new Set();
 let state='ready',score=0,combo=0,timeLeft=45,last=0,spawn=0,items=[],particles=[],stars=[],raf=0;
 let glowFlash=0,rainbowTime=0,shadowTime=0,mascotTilt=0;
+const REQUIRED_GOOD=12,REQUIRED_RARE=3;
+let playerName='',collectedGood=0,collectedRare=0,spawnedGood=0,spawnedRare=0;
+const todayKey=()=>{const d=new Date();return d.getFullYear()+'-'+String(d.getMonth()+1).padStart(2,'0')+'-'+String(d.getDate()).padStart(2,'0')};
+function getDailyBoard(){try{const raw=JSON.parse(localStorage.getItem('moxiao-board-'+todayKey())||'[]');return Array.isArray(raw)?raw:[]}catch(e){return []}}
+function escapeHTML(s){return String(s).replace(/[&<>\"']/g,ch=>({'&':'&amp;','<':'&lt;','>':'&gt;','\"':'&quot;',"'":'&#39;'}[ch]))}
+function renderDailyBoard(){const el=$('dailyBoard');if(!el)return;const rows=getDailyBoard().sort((a,b)=>b.score-a.score).slice(0,5);el.innerHTML='<div style="font-weight:700;color:#f7f7ff;margin-bottom:8px">🏆 今日排行榜 <span style="font-weight:400;color:#8f97b0">· 本设备记录</span></div>'+(rows.length?rows.map((r,i)=>'<div style="display:flex;justify-content:space-between;gap:10px;padding:5px 0;border-bottom:1px solid #ffffff12"><span>'+(i+1)+'. '+escapeHTML(r.name)+'</span><span>'+r.score+' 分'+(r.cleared?' · 通关':'')+'</span></div>').join(''):'<div style="color:#8f97b0">今天还没有记录，来拿下第一名吧！</div>')}
+function saveDailyResult(cleared){const rows=getDailyBoard();rows.push({name:playerName||'蘑菇旅人',score,cleared,at:Date.now()});rows.sort((a,b)=>b.score-a.score);try{localStorage.setItem('moxiao-board-'+todayKey(),JSON.stringify(rows.slice(0,20)))}catch(e){}renderDailyBoard()}
 let best=0;try{best=Number(localStorage.getItem('moxiao-best')||0)}catch(e){}
 $('best').textContent=best;
 const player={x:W/2,y:H-95,r:27,speed:330,invuln:0};
 for(let i=0;i<110;i++)stars.push({x:Math.random()*W,y:Math.random()*H,r:Math.random()*1.7+.3,a:Math.random()*.65+.15,p:Math.random()*6});
 function resizeDraw(){if(state!=='playing')draw(0)}
-function spawnItem(){const rare=Math.random()<.13,bad=!rare&&Math.random()<Math.min(.25,.1+(45-timeLeft)*.003);items.push({x:35+Math.random()*(W-70),y:-25,r:rare?13:bad?15:11,vy:(rare?105:bad?150:120)+Math.random()*55,type:rare?'rare':bad?'bad':'good',spin:Math.random()*6})}
+function spawnItem(forceType){const type=forceType||(Math.random()<.13?'rare':Math.random()<Math.min(.25,.1+(45-timeLeft)*.003)?'bad':'good');const rare=type==='rare',bad=type==='bad';items.push({x:35+Math.random()*(W-70),y:-25,r:rare?13:bad?15:11,vy:(rare?105:bad?150:120)+Math.random()*55,type,spin:Math.random()*6})}
 function burst(x,y,color,n=12){for(let i=0;i<n;i++){let a=Math.random()*Math.PI*2,s=35+Math.random()*180;particles.push({x,y,vx:Math.cos(a)*s,vy:Math.sin(a)*s,life:.45+Math.random()*.5,max:.95,color,r:2+Math.random()*3})}}
 function rainbowBurst(x,y,n=28){const colors=['#ff6fcf','#ffd36e','#a7ffdb','#75d7ff','#b8a0ff'];for(let i=0;i<n;i++){let a=Math.random()*Math.PI*2,s=45+Math.random()*220;particles.push({x,y,vx:Math.cos(a)*s,vy:Math.sin(a)*s,life:.55+Math.random()*.7,max:1.25,color:colors[i%colors.length],r:2+Math.random()*4})}}
 function rounded(x,y,w,h,r){ctx.beginPath();ctx.roundRect(x,y,w,h,r)}
@@ -73,20 +80,22 @@ function update(dt){
  let dy=(keys.has('ArrowDown')||keys.has('s')||keys.has('S')?1:0)-(keys.has('ArrowUp')||keys.has('w')||keys.has('W')?1:0);
  if(dx||dy){let len=Math.hypot(dx,dy);player.x+=dx/len*player.speed*dt;player.y+=dy/len*player.speed*dt}
  player.x=Math.max(30,Math.min(W-30,player.x));player.y=Math.max(38,Math.min(H-38,player.y));
- spawn+=dt;const interval=Math.max(.24,.72-(45-timeLeft)*.008);if(spawn>interval){spawn=0;spawnItem();if(Math.random()<.17)spawnItem()}
- for(let i=items.length-1;i>=0;i--){const it=items[i];it.y+=it.vy*dt;if(Math.hypot(it.x-player.x,it.y-player.y)<it.r+25){if(it.type==='bad'){combo=0;player.invuln=.35;shadowTime=1.05;glowFlash=0;rainbowTime=0;mascotTilt=(Math.random()-.5)*.18;burst(it.x,it.y,'#ff718f',9);burst(player.x,player.y,'#171923',15)}else{combo++;score+=(it.type==='rare'?30:10)+Math.min(combo,10)*2;if(it.type==='rare'){rainbowTime=2.1;glowFlash=0;shadowTime=0;rainbowBurst(player.x,player.y,34)}else{glowFlash=.48;shadowTime=0;burst(player.x,player.y,'#b9a8ff',10);burst(player.x,player.y,'#83e8ff',5)}}items.splice(i,1);updateHUD()}else if(it.y>H+30)items.splice(i,1)}
+ spawn+=dt;const interval=.62;if(spawn>interval){spawn=0;const remaining=[];if(spawnedGood<REQUIRED_GOOD)remaining.push('good');if(spawnedRare<REQUIRED_RARE)remaining.push('rare');if(remaining.length){const type=remaining[Math.floor(Math.random()*remaining.length)];spawnItem(type);if(type==='good')spawnedGood++;else spawnedRare++;}if(Math.random()<.28)spawnItem('bad');}
+ for(let i=items.length-1;i>=0;i--){const it=items[i];it.y+=it.vy*dt;if(Math.hypot(it.x-player.x,it.y-player.y)<it.r+25){if(it.type==='bad'){combo=0;player.invuln=.35;shadowTime=1.05;glowFlash=0;rainbowTime=0;mascotTilt=(Math.random()-.5)*.18;burst(it.x,it.y,'#ff718f',9);burst(player.x,player.y,'#171923',15)}else{combo++;score+=(it.type==='rare'?30:10)+Math.min(combo,10)*2;if(it.type==='rare'){collectedRare++;rainbowTime=2.1;glowFlash=0;shadowTime=0;rainbowBurst(player.x,player.y,34)}else{collectedGood++;glowFlash=.48;shadowTime=0;burst(player.x,player.y,'#b9a8ff',10);burst(player.x,player.y,'#83e8ff',5)}}items.splice(i,1);updateHUD();if(collectedGood===REQUIRED_GOOD&&collectedRare===REQUIRED_RARE){endGame(true);return}}else if(it.y>H+30){if(it.type==='good'||it.type==='rare'){endGame(false);return}items.splice(i,1)}}
  for(let i=particles.length-1;i>=0;i--){const p=particles[i];p.x+=p.vx*dt;p.y+=p.vy*dt;p.vx*=.98;p.vy*=.98;p.life-=dt;if(p.life<=0)particles.splice(i,1)}
- if(timeLeft<=0)endGame();
+ if(timeLeft<=0)endGame(false);
 }
-function updateHUD(){$('score').textContent=String(score).padStart(3,'0');$('time').textContent=Math.ceil(timeLeft);$('combo').textContent='×'+combo}
+function updateHUD(){$('score').textContent=String(score).padStart(3,'0');$('time').textContent=Math.ceil(timeLeft);$('combo').textContent='×'+combo;const counter=$('sporeProgress');if(counter)counter.textContent='普通 '+collectedGood+'/'+REQUIRED_GOOD+' · 金色 '+collectedRare+'/'+REQUIRED_RARE}
 function loop(now){const dt=Math.min((now-last)/1000||0,.033);last=now;update(dt);draw(dt);if(state==='playing')raf=requestAnimationFrame(loop)}
-function startGame(){cancelAnimationFrame(raf);score=0;combo=0;timeLeft=45;spawn=0;items=[];particles=[];glowFlash=0;rainbowTime=0;shadowTime=0;mascotTilt=0;player.x=W/2;player.y=H-95;player.invuln=0;state='playing';$('overlay').classList.add('hidden');updateHUD();last=performance.now();raf=requestAnimationFrame(loop)}
-function endGame(){state='over';const isNewRecord=score>best;if(isNewRecord){best=score;try{localStorage.setItem('moxiao-best',String(best))}catch(e){}$('best').textContent=best}$('modalMascot').textContent=score>=300?'🌟':'🍄';$('modalTitle').textContent=score>=300?'孢子大师！':'漫游结束';$('modalText').textContent='本次收集 '+score+' 分。'+(isNewRecord?' 新纪录诞生！':'')+' 每一颗微光，都让这片星雾更明亮。';$('start').textContent='再玩一次 ↻';$('overlay').classList.remove('hidden');draw(0)}
+function startGame(){const field=$('playerName');const typed=field?field.value.trim():'';if(typed)playerName=typed.slice(0,16);else if(!playerName)playerName='蘑菇旅人';try{localStorage.setItem('moxiao-player-name',playerName)}catch(e){}cancelAnimationFrame(raf);score=0;combo=0;timeLeft=45;spawn=0;items=[];particles=[];collectedGood=0;collectedRare=0;spawnedGood=0;spawnedRare=0;glowFlash=0;rainbowTime=0;shadowTime=0;mascotTilt=0;player.x=W/2;player.y=H-95;player.invuln=0;state='playing';$('overlay').classList.add('hidden');updateHUD();last=performance.now();raf=requestAnimationFrame(loop)}
+function endGame(cleared=false){if(state!=='playing')return;state='over';const isNewRecord=score>best;if(isNewRecord){best=score;try{localStorage.setItem('moxiao-best',String(best))}catch(e){}$('best').textContent=best}saveDailyResult(cleared);$('modalMascot').textContent=cleared?'🌟':'🍄';$('modalTitle').textContent=cleared?'今日通关！':'孢子大师';$('modalText').textContent=cleared?'太棒了，'+playerName+'！你收集齐了全部普通孢子和金色孢子，成功完成今日挑战！本次得分：'+score+'。':'还差一点！普通孢子 '+collectedGood+'/'+REQUIRED_GOOD+'，金色孢子 '+collectedRare+'/'+REQUIRED_RARE+'。收集齐全部目标即可获得「今日通关」，再试一次吧！本次得分：'+score+'。';$('nameBox').style.display='none';$('start').textContent='再试一次 ↻';$('overlay').classList.remove('hidden');draw(0)}
 $('start').addEventListener('click',startGame);
 window.addEventListener('keydown',e=>{if(['ArrowUp','ArrowDown','ArrowLeft','ArrowRight',' '].includes(e.key))e.preventDefault();keys.add(e.key);if((e.key==='Enter'||e.key===' ')&&state!=='playing')startGame()});
 window.addEventListener('keyup',e=>keys.delete(e.key));window.addEventListener('blur',()=>keys.clear());
 function pointerMove(e){if(state!=='playing')return;const r=canvas.getBoundingClientRect();player.x=Math.max(30,Math.min(W-30,(e.clientX-r.left)/r.width*W));player.y=Math.max(38,Math.min(H-38,(e.clientY-r.top)/r.height*H))}
 canvas.addEventListener('pointermove',pointerMove);canvas.addEventListener('pointerdown',e=>{if(state==='playing')pointerMove(e)});
+try{playerName=localStorage.getItem('moxiao-player-name')||''}catch(e){}if(playerName)$('playerName').value=playerName;renderDailyBoard();
+$('playerName').addEventListener('keydown',e=>{if(e.key==='Enter')startGame()});
 draw(0);
 })();
 </script></body></html>
