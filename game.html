@@ -30,6 +30,7 @@ const canvas=document.getElementById('game'),ctx=canvas.getContext('2d');
 const $=id=>document.getElementById(id);
 const W=960,H=540,keys=new Set();
 let state='ready',score=0,combo=0,timeLeft=45,last=0,spawn=0,items=[],particles=[],stars=[],raf=0;
+let glowFlash=0,rainbowTime=0,shadowTime=0,mascotTilt=0;
 let best=0;try{best=Number(localStorage.getItem('moxiao-best')||0)}catch(e){}
 $('best').textContent=best;
 const player={x:W/2,y:H-95,r:27,speed:330,invuln:0};
@@ -37,8 +38,10 @@ for(let i=0;i<110;i++)stars.push({x:Math.random()*W,y:Math.random()*H,r:Math.ran
 function resizeDraw(){if(state!=='playing')draw(0)}
 function spawnItem(){const rare=Math.random()<.13,bad=!rare&&Math.random()<Math.min(.25,.1+(45-timeLeft)*.003);items.push({x:35+Math.random()*(W-70),y:-25,r:rare?13:bad?15:11,vy:(rare?105:bad?150:120)+Math.random()*55,type:rare?'rare':bad?'bad':'good',spin:Math.random()*6})}
 function burst(x,y,color,n=12){for(let i=0;i<n;i++){let a=Math.random()*Math.PI*2,s=35+Math.random()*180;particles.push({x,y,vx:Math.cos(a)*s,vy:Math.sin(a)*s,life:.45+Math.random()*.5,max:.95,color,r:2+Math.random()*3})}}
+function rainbowBurst(x,y,n=28){const colors=['#ff6fcf','#ffd36e','#a7ffdb','#75d7ff','#b8a0ff'];for(let i=0;i<n;i++){let a=Math.random()*Math.PI*2,s=45+Math.random()*220;particles.push({x,y,vx:Math.cos(a)*s,vy:Math.sin(a)*s,life:.55+Math.random()*.7,max:1.25,color:colors[i%colors.length],r:2+Math.random()*4})}}
 function rounded(x,y,w,h,r){ctx.beginPath();ctx.roundRect(x,y,w,h,r)}
 function draw(dt){
+ glowFlash=Math.max(0,glowFlash-dt);rainbowTime=Math.max(0,rainbowTime-dt);shadowTime=Math.max(0,shadowTime-dt);
  ctx.clearRect(0,0,W,H);
  const g=ctx.createRadialGradient(W*.5,H*.15,5,W*.5,H*.4,W*.8);g.addColorStop(0,'#27264e');g.addColorStop(1,'#0d1423');ctx.fillStyle=g;ctx.fillRect(0,0,W,H);
  for(const s of stars){ctx.globalAlpha=s.a*(.7+.3*Math.sin(performance.now()*.001+s.p));ctx.fillStyle='#d8ddff';ctx.beginPath();ctx.arc(s.x,s.y,s.r,0,Math.PI*2);ctx.fill()}ctx.globalAlpha=1;
@@ -47,11 +50,19 @@ function draw(dt){
  const color=it.type==='rare'?'#ffe3a0':it.type==='bad'?'#ff718f':'#a8a0ff';
  ctx.shadowBlur=it.type==='bad'?18:22;ctx.shadowColor=color;ctx.fillStyle=color+'28';ctx.beginPath();ctx.arc(0,0,it.r*1.8,0,Math.PI*2);ctx.fill();ctx.fillStyle=color;ctx.beginPath();ctx.arc(0,0,it.r*.55,0,Math.PI*2);ctx.fill();ctx.fillStyle='#fff';ctx.globalAlpha=.8;ctx.beginPath();ctx.arc(-it.r*.2,-it.r*.2,it.r*.16,0,Math.PI*2);ctx.fill();ctx.restore();ctx.globalAlpha=1}
  for(const p of particles){ctx.globalAlpha=Math.max(0,p.life/p.max);ctx.fillStyle=p.color;ctx.beginPath();ctx.arc(p.x,p.y,p.r,0,Math.PI*2);ctx.fill()}ctx.globalAlpha=1;
- ctx.save();ctx.translate(player.x,player.y);
- const halo=ctx.createRadialGradient(0,0,2,0,0,55);halo.addColorStop(0,'#bca8ff40');halo.addColorStop(1,'#bca8ff00');ctx.fillStyle=halo;ctx.beginPath();ctx.arc(0,0,55,0,Math.PI*2);ctx.fill();
- ctx.shadowColor='#b5a3ff';ctx.shadowBlur=player.invuln>0?28:15;
- if(window.moxiaoImage&&window.moxiaoImage.complete&&window.moxiaoImage.naturalWidth){ctx.drawImage(window.moxiaoImage,-42,-52,84,104)}
- else{ctx.font='58px serif';ctx.textAlign='center';ctx.textBaseline='middle';ctx.fillText('🍄',0,0)}
+ const t=performance.now()*.001;const floatY=Math.sin(t*1.45)*5;const tilt=Math.sin(t*.9)*.045;
+ ctx.save();ctx.translate(player.x,player.y+floatY);ctx.rotate(tilt+mascotTilt);
+ const halo=ctx.createRadialGradient(0,0,2,0,0,rainbowTime>0?72:58);halo.addColorStop(0,rainbowTime>0?'#ff8fe866':shadowTime>0?'#080910aa':glowFlash>0?'#9ee8ff77':'#bca8ff40');halo.addColorStop(.55,rainbowTime>0?'#9e8cff33':'#bca8ff18');halo.addColorStop(1,'#bca8ff00');ctx.fillStyle=halo;ctx.beginPath();ctx.arc(0,0,rainbowTime>0?72:58,0,Math.PI*2);ctx.fill();
+ ctx.shadowColor=rainbowTime>0?'#ff8fe8':shadowTime>0?'#05060a':glowFlash>0?'#9deaff':'#b5a3ff';ctx.shadowBlur=rainbowTime>0?34:shadowTime>0?3:glowFlash>0?32:(player.invuln>0?28:15);
+ if(window.moxiaoImage&&window.moxiaoImage.complete&&window.moxiaoImage.naturalWidth){
+   ctx.save();
+   if(shadowTime>0){ctx.filter='grayscale(1) brightness(0.12) contrast(1.25)';ctx.globalAlpha=.98}
+   else if(rainbowTime>0){ctx.filter='saturate(2.6) brightness(1.35) hue-rotate('+(Math.sin(t*7)*24)+'deg)'}
+   else if(glowFlash>0){ctx.filter='saturate(1.8) brightness('+(1.15+glowFlash*.75)+')'}
+   ctx.drawImage(window.moxiaoImage,-42,-52,84,104);ctx.restore();
+   if(rainbowTime>0){ctx.save();ctx.globalCompositeOperation='screen';ctx.globalAlpha=.24+.12*Math.sin(t*12);const rg=ctx.createLinearGradient(-42,-48,42,48);rg.addColorStop(0,'#ff6fcf');rg.addColorStop(.25,'#ffd36e');rg.addColorStop(.5,'#a7ffdb');rg.addColorStop(.75,'#75d7ff');rg.addColorStop(1,'#c7a8ff');ctx.fillStyle=rg;ctx.fillRect(-42,-52,84,104);ctx.restore()}
+ }else{ctx.font='58px serif';ctx.textAlign='center';ctx.textBaseline='middle';ctx.fillText('🍄',0,0)}
+ if(rainbowTime>0){for(let i=0;i<3;i++){ctx.beginPath();ctx.ellipse(0,0,49+i*5,58+i*5,t*.3+i*.8,0,Math.PI*2);ctx.strokeStyle=['#ff83d5','#8edfff','#d0a6ff'][i];ctx.globalAlpha=.28+.15*Math.sin(t*5+i);ctx.lineWidth=1.5;ctx.stroke()}}
  ctx.restore();ctx.globalAlpha=1;
  if(state==='playing'){ctx.fillStyle='#ffffff18';rounded(22,20,150,4,2);ctx.fill();ctx.fillStyle='#b9a8ff';rounded(22,20,150*Math.max(0,timeLeft/45),4,2);ctx.fill()}
 }
@@ -63,14 +74,14 @@ function update(dt){
  if(dx||dy){let len=Math.hypot(dx,dy);player.x+=dx/len*player.speed*dt;player.y+=dy/len*player.speed*dt}
  player.x=Math.max(30,Math.min(W-30,player.x));player.y=Math.max(38,Math.min(H-38,player.y));
  spawn+=dt;const interval=Math.max(.24,.72-(45-timeLeft)*.008);if(spawn>interval){spawn=0;spawnItem();if(Math.random()<.17)spawnItem()}
- for(let i=items.length-1;i>=0;i--){const it=items[i];it.y+=it.vy*dt;if(Math.hypot(it.x-player.x,it.y-player.y)<it.r+25){if(it.type==='bad'){combo=0;player.invuln=.35;burst(it.x,it.y,'#ff718f',9)}else{combo++;score+=(it.type==='rare'?30:10)+Math.min(combo,10)*2;burst(it.x,it.y,it.type==='rare'?'#ffe3a0':'#b9a8ff',10)}items.splice(i,1);updateHUD()}else if(it.y>H+30)items.splice(i,1)}
+ for(let i=items.length-1;i>=0;i--){const it=items[i];it.y+=it.vy*dt;if(Math.hypot(it.x-player.x,it.y-player.y)<it.r+25){if(it.type==='bad'){combo=0;player.invuln=.35;shadowTime=1.05;glowFlash=0;rainbowTime=0;mascotTilt=(Math.random()-.5)*.18;burst(it.x,it.y,'#ff718f',9);burst(player.x,player.y,'#171923',15)}else{combo++;score+=(it.type==='rare'?30:10)+Math.min(combo,10)*2;if(it.type==='rare'){rainbowTime=2.1;glowFlash=0;shadowTime=0;rainbowBurst(player.x,player.y,34)}else{glowFlash=.48;shadowTime=0;burst(player.x,player.y,'#b9a8ff',10);burst(player.x,player.y,'#83e8ff',5)}}items.splice(i,1);updateHUD()}else if(it.y>H+30)items.splice(i,1)}
  for(let i=particles.length-1;i>=0;i--){const p=particles[i];p.x+=p.vx*dt;p.y+=p.vy*dt;p.vx*=.98;p.vy*=.98;p.life-=dt;if(p.life<=0)particles.splice(i,1)}
  if(timeLeft<=0)endGame();
 }
 function updateHUD(){$('score').textContent=String(score).padStart(3,'0');$('time').textContent=Math.ceil(timeLeft);$('combo').textContent='×'+combo}
 function loop(now){const dt=Math.min((now-last)/1000||0,.033);last=now;update(dt);draw(dt);if(state==='playing')raf=requestAnimationFrame(loop)}
-function startGame(){cancelAnimationFrame(raf);score=0;combo=0;timeLeft=45;spawn=0;items=[];particles=[];player.x=W/2;player.y=H-95;player.invuln=0;state='playing';$('overlay').classList.add('hidden');updateHUD();last=performance.now();raf=requestAnimationFrame(loop)}
-function endGame(){state='over';if(score>best){best=score;try{localStorage.setItem('moxiao-best',String(best))}catch(e){}$('best').textContent=best}$('modalMascot').textContent=score>=300?'🌟':'🍄';$('modalTitle').textContent=score>=300?'孢子大师！':'漫游结束';$('modalText').textContent='本次收集 '+score+' 分。'+(score>best?'新纪录诞生！':'')+' 每一颗微光，都让这片星雾更明亮。';$('start').textContent='再玩一次 ↻';$('overlay').classList.remove('hidden');draw(0)}
+function startGame(){cancelAnimationFrame(raf);score=0;combo=0;timeLeft=45;spawn=0;items=[];particles=[];glowFlash=0;rainbowTime=0;shadowTime=0;mascotTilt=0;player.x=W/2;player.y=H-95;player.invuln=0;state='playing';$('overlay').classList.add('hidden');updateHUD();last=performance.now();raf=requestAnimationFrame(loop)}
+function endGame(){state='over';const isNewRecord=score>best;if(isNewRecord){best=score;try{localStorage.setItem('moxiao-best',String(best))}catch(e){}$('best').textContent=best}$('modalMascot').textContent=score>=300?'🌟':'🍄';$('modalTitle').textContent=score>=300?'孢子大师！':'漫游结束';$('modalText').textContent='本次收集 '+score+' 分。'+(isNewRecord?' 新纪录诞生！':'')+' 每一颗微光，都让这片星雾更明亮。';$('start').textContent='再玩一次 ↻';$('overlay').classList.remove('hidden');draw(0)}
 $('start').addEventListener('click',startGame);
 window.addEventListener('keydown',e=>{if(['ArrowUp','ArrowDown','ArrowLeft','ArrowRight',' '].includes(e.key))e.preventDefault();keys.add(e.key);if((e.key==='Enter'||e.key===' ')&&state!=='playing')startGame()});
 window.addEventListener('keyup',e=>keys.delete(e.key));window.addEventListener('blur',()=>keys.clear());
